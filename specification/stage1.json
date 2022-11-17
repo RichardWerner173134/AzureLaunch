@@ -1,0 +1,30 @@
+{
+	"azAccount": {
+		"azureUsername": "richard.werner50@gmail.com",
+	},
+	"graph": {
+		"nodes": [
+			{
+				"name": "n1WriteToServiceBus",
+				"type": "function"
+			},
+			{
+				"name": "n2ServiceBus",
+				"type": "servicebus"
+			},
+			{
+				"name": "n3ReadServiceBus",
+				"type": "function"
+			}
+		],
+		"edges": [
+			{
+				"startNode": "n1WriteToServiceBus",
+				"endNode": "n2ServiceBus"
+			},
+			{
+				"startNode": "
+			}
+		]
+	}
+}
