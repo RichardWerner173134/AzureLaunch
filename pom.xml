@@ -18,6 +18,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.profesorfalken</groupId>
+      <artifactId>jPowerShell</artifactId>
+      <version>3.1.1</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
@@ -28,6 +33,11 @@
       <artifactId>junit-jupiter</artifactId>
       <version>RELEASE</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.3.1</version>
     </dependency>
   </dependencies>
 
@@ -75,5 +85,15 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>9</source>
+          <target>9</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

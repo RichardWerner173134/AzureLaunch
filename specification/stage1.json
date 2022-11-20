@@ -4,14 +4,30 @@
 		"resourceGroup": "rg-lkaujshlkasjhdlkjhsdlkajh"
 	},
 	"graph": {
-		"edges": [
+		"nodes": [
 			{
-				"startNode": "n1WriteToServiceBus",
-				"endNode": "n2ServiceBus",
-				
+				"name": "subscription01",
+				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
-				"startNode": "
+				"name": "function01",
+				"type": "Microsoft.Web/sites/functions"
+			},
+			{
+				"name": "function02",
+				"type": "Microsoft.Web/sites/functions"
+			}
+		],
+		"edges": [
+			{
+				"node1": "function01",
+				"node2": "subscription01",
+				"type": "write"
+			},
+			{
+				"node1": "function02",
+				"node2": "subscription02",
+				"type": "read"
 			}
 		]
 	}

@@ -1,0 +1,63 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: HTTP API for parsing tachograph file
+  description: HTTP API for parsing tachograph file
+  termsOfService: ''
+basePath: /tachomgmt/v1_0_0
+paths:
+  /parseTachographFile:
+    post:
+      description: parse given tachograph file (mass memory or drivercard file)
+      summary: parse given tachograph file (mass memory or drivercard file)
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: requestBody
+          schema:
+            $ref: '#/definitions/ParseFileRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+definitions:
+  ParseFileRequest:
+    description: parsed file result
+    type: object
+    properties:
+      azAccount:
+        $ref: '#/definitions/azAccount'
+      graph:
+        $ref: '#/definitions/graph'
+  azAccount:
+    type: object
+    properties:
+      subscription: 
+        type: string
+      resourceGroup:
+        type: string
+  graph:
+    type: object
+    properties:
+      nodes:
+        type: array
+        items: 
+          type: object
+          properties:
+            name:
+              type: string
+            type: 
+              type: string
+      edges:
+        type: array
+        items:
+          type: object
+          properties:
+            node1:
+              type: string
+            node2:
+              type: string
+            type: 
+              type: string
