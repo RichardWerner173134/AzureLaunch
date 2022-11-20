@@ -3,15 +3,18 @@ package com.werner;
 import com.werner.bl.processor.UserInputProcessor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-public class Main implements CommandLineRunner {
+public class Main implements CommandLineRunner{
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication application = new SpringApplication(Main.class);
+        application.setWebApplicationType(WebApplicationType.NONE);
+        application.run(args);
     }
 
     @Override
@@ -22,5 +25,6 @@ public class Main implements CommandLineRunner {
 
         UserInputProcessor processor = new UserInputProcessor(filePath);
         processor.process();
+        System.exit(0);
     }
 }

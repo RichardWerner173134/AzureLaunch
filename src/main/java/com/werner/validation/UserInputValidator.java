@@ -1,10 +1,10 @@
 package com.werner.validation;
 
-import com.werner.bl.input.generated.ParseFileRequest;
+import generated.internal.v1_0_0.model.AzCodegenRequest;
 
 public class UserInputValidator {
 
-	public void validateUserInput(ParseFileRequest request){
+	public void validateUserInput(AzCodegenRequest request){
 
 	}
 }

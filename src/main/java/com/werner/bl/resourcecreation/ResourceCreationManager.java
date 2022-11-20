@@ -1,8 +1,5 @@
 package com.werner.bl.resourcecreation;
 
-import com.werner.bl.input.generated.GraphEdges;
-import com.werner.bl.input.generated.GraphNodes;
-import com.werner.bl.input.generated.ParseFileRequest;
 import com.werner.bl.resourcecreation.model.BasicResource;
 import com.werner.bl.resourcecreation.model.CodegenResource;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
@@ -10,6 +7,9 @@ import com.werner.bl.resourcecreation.model.graph.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.AbstractResourceNode;
 import com.werner.helper.PowershellCaller;
+import generated.internal.v1_0_0.model.AzCodegenRequest;
+import generated.internal.v1_0_0.model.GraphEdges;
+import generated.internal.v1_0_0.model.GraphNodes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ResourceCreationManager {
 		powershellCaller = new PowershellCaller();
 	}
 
-	public ResourceGraph computeResourceGraph(ParseFileRequest request) {
+	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
 		List<AbstractResourceNode> nodes = new ArrayList<>();
 		List<ResourceEdge> edges = new ArrayList<>();
 

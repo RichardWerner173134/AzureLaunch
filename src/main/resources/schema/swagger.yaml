@@ -4,9 +4,8 @@ info:
   title: HTTP API for parsing tachograph file
   description: HTTP API for parsing tachograph file
   termsOfService: ''
-basePath: /tachomgmt/v1_0_0
 paths:
-  /parseTachographFile:
+  /createAzureResources:
     post:
       description: parse given tachograph file (mass memory or drivercard file)
       summary: parse given tachograph file (mass memory or drivercard file)
@@ -16,14 +15,14 @@ paths:
         - in: body
           name: requestBody
           schema:
-            $ref: '#/definitions/ParseFileRequest'
+            $ref: '#/definitions/AzCodegenRequest'
       responses:
         '200':
           description: OK
           schema:
             type: string
 definitions:
-  ParseFileRequest:
+  AzCodegenRequest:
     description: parsed file result
     type: object
     properties:
