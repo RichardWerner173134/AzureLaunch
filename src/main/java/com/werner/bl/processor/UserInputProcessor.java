@@ -4,7 +4,7 @@ import com.werner.bl.input.UserInputReader;
 import com.werner.bl.input.generated.ParseFileRequest;
 import com.werner.bl.resourcecreation.ResourceCreationManager;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
-import com.werner.bl.resourcecreation.model.ResourceGraph;
+import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.validation.UserInputValidator;
 
 import java.io.File;

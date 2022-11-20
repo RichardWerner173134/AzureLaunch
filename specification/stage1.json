@@ -12,10 +12,6 @@
 			{
 				"name": "function01",
 				"type": "Microsoft.Web/sites/functions"
-			},
-			{
-				"name": "function02",
-				"type": "Microsoft.Web/sites/functions"
 			}
 		],
 		"edges": [
