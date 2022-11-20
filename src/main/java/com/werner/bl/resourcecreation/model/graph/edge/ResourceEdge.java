@@ -1,5 +1,6 @@
-package com.werner.bl.resourcecreation.model.graph;
+package com.werner.bl.resourcecreation.model.graph.edge;
 
+import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 
 public class ResourceEdge {
 	private AbstractResourceNode resource1;

@@ -1,11 +1,13 @@
 package com.werner.bl.resourcecreation;
 
-import com.werner.bl.resourcecreation.model.BasicResource;
-import com.werner.bl.resourcecreation.model.CodegenResource;
+import com.werner.bl.resourcecreation.model.graph.node.BasicResourceNode;
+import com.werner.bl.resourcecreation.model.graph.node.CodegenResourceNode;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
-import com.werner.bl.resourcecreation.model.graph.ResourceEdge;
+import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
-import com.werner.bl.resourcecreation.model.graph.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.dependency.DependencyHierarchy;
+import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.helper.PowershellCaller;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
@@ -16,9 +18,11 @@ import java.util.List;
 
 public class ResourceCreationManager {
 	private final PowershellCaller powershellCaller;
+	private final DependencyHierarchy dependencyHierarchy;
 
 	public ResourceCreationManager() {
 		powershellCaller = new PowershellCaller();
+		dependencyHierarchy = new DependencyHierarchy();
 	}
 
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
@@ -27,11 +31,12 @@ public class ResourceCreationManager {
 
 		for(GraphNodes node : request.getGraph().getNodes()) {
 			String name = node.getName();
-			String type = node.getType();
-			if(type.equals("Microsoft.Web/sites/functions")) {
-				nodes.add(new CodegenResource(name, type));
+			ResourceType type = ResourceType.findById(node.getType());
+
+			if(type == ResourceType.FUNCTION || type == ResourceType.FUNCTION_APP) {
+				nodes.add(new CodegenResourceNode(name, type));
 			} else {
-				nodes.add(new BasicResource(name, type));
+				nodes.add(new BasicResourceNode(name, type));
 			}
 		}
 
@@ -53,9 +58,9 @@ public class ResourceCreationManager {
 
 	public ResourceCreationPlan computeResourceCreationPlan(ResourceGraph resourceGraph) {
 		ResourceCreationPlan resourceCreationPlan = new ResourceCreationPlan();
-		resourceCreationPlan.getCreationCommands().add("Write-Host 'Hello, World1!'");
-		resourceCreationPlan.getCreationCommands().add("Write-Host 'Hello, World2!'");
-		resourceCreationPlan.getCreationCommands().add("Write-Host 'Hello, World3!'");
+
+		// use dependencyHierarchy to create ResourceCreationPlan
+		resourceGraph.get
 		return resourceCreationPlan;
 	}
 

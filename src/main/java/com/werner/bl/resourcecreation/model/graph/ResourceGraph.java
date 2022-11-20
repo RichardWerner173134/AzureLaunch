@@ -1,5 +1,8 @@
 package com.werner.bl.resourcecreation.model.graph;
 
+import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
+import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+
 import java.util.List;
 
 public class ResourceGraph {
