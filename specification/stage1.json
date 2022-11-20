@@ -19,11 +19,6 @@
 				"node1": "function01",
 				"node2": "subscription01",
 				"type": "write"
-			},
-			{
-				"node1": "function02",
-				"node2": "subscription02",
-				"type": "read"
 			}
 		]
 	}

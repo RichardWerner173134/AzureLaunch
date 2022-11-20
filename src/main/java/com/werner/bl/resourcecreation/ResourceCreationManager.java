@@ -41,9 +41,9 @@ public class ResourceCreationManager {
 
 			try {
 				node1 = nodes.stream().filter(x -> x.getName().equals(edge.getNode1()))
-						.findFirst().orElseThrow(() -> new Exception("node 1 not found in edges list"));
+						.findFirst().orElseThrow(() -> new Exception("node 1 not found in edges list: " + edge));
 				node2 = nodes.stream().filter(x -> x.getName().equals(edge.getNode2()))
-						.findFirst().orElseThrow(() -> new Exception("node 2 not found in edges list"));
+						.findFirst().orElseThrow(() -> new Exception("node 2 not found in edges list" + edge));
 			} catch (Exception e) { e.printStackTrace(); }
 
 			edges.add(new ResourceEdge(node1, node2));
