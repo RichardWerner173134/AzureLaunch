@@ -18,4 +18,18 @@ public class DependencyHierarchy {
 				new Dependency(ResourceType.SERVICEBUS_TOPIC, ResourceType.SERVICEBUS_NAMESPACE))
 		);
 	}
+
+	public List<Dependency> getDependencyList() {
+		return dependencyList;
+	}
+
+	public Dependency findByType(ResourceType type){
+
+		for (Dependency dependency : dependencyList) {
+			if (type == dependency.getDependentType()){
+				return dependency;
+			}
+		}
+		return null;
+	}
 }

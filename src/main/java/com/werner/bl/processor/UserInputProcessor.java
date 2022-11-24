@@ -23,19 +23,13 @@ public class UserInputProcessor {
 		this.filePath = filePath;
 	}
 
-	public void process() {
-		AzCodegenRequest parseFileRequest = null;
-		try {
-			parseFileRequest = userInputReader.readUserInput(new File(this.filePath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void process() throws Exception {
 
+		AzCodegenRequest parseFileRequest = userInputReader.readUserInput(new File(this.filePath));
 		userInputValidator.validateUserInput(parseFileRequest);
 
 		ResourceGraph resourceGraph = resourceCreationManager.computeResourceGraph(parseFileRequest);
 		ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
 		resourceCreationManager.createResources(resourceCreationPlan);
-
 	}
 }
