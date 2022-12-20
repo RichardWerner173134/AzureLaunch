@@ -5,28 +5,27 @@ import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.dependency.Dependency;
 import com.werner.bl.resourcecreation.model.dependency.DependencyHierarchy;
 import com.werner.bl.resourcecreation.model.deployment.Deployment;
+import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceNodeFactory;
-import com.werner.helper.PowershellCaller;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
 import generated.internal.v1_0_0.model.GraphNodes;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@Component
 public class ResourceCreationManager {
-	private final PowershellCaller powershellCaller;
 	private final DependencyHierarchy dependencyHierarchy;
 	private final ResourceNodeFactory resourceNodeFactory;
 
-	public ResourceCreationManager() {
-		powershellCaller = new PowershellCaller();
-		dependencyHierarchy = new DependencyHierarchy();
-		resourceNodeFactory = new ResourceNodeFactory();
-	}
+	private final DeploymentHandler deploymentHandler;
 
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
 		List<AbstractResourceNode> nodes = new ArrayList<>();
@@ -76,7 +75,7 @@ public class ResourceCreationManager {
 
 	public void createResources(ResourceCreationPlan resourceCreationPlan) throws Exception {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
-			deployment.deploy();
+			deploymentHandler.handleDeployment(deployment);
 		}
 	}
 

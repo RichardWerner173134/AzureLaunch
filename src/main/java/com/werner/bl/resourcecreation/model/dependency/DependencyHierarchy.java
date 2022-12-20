@@ -1,10 +1,12 @@
 package com.werner.bl.resourcecreation.model.dependency;
 
 import com.werner.bl.resourcecreation.model.ResourceType;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class DependencyHierarchy {
 	private final List<Dependency> dependencyList;
 

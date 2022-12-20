@@ -2,12 +2,14 @@ package com.werner.bl.input;
 
 import com.google.gson.Gson;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+@Component
 public class UserInputReader {
 	public AzCodegenRequest readUserInput(File file) throws IOException {
 		String jsonContent = readSampleFile(file);

@@ -1,24 +1,21 @@
 package com.werner.bl.resourcecreation.model.deployment;
 
-import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
-import com.werner.helper.PowershellCaller;
+import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
+@AllArgsConstructor
 public class DeploymentHandler {
 	private final static String RESOURCE_GROUP_DEFAULT_VALUE = "rgtest-rwerner";
-	private final static String TEMPLATE_DIRECTORY = "src/main/resources/templates/";
-	private final static String SERVICEBUS_TEMPLATE_DIR = TEMPLATE_DIRECTORY + "serviceBusPubSub/";
 
-	private PowershellCaller powershellCaller;
+	private ServiceBusSubscriptionPowershellCaller sbsubCaller;
 
-	// TODO Refactoring
-	public DeploymentHandler() {
-		this.powershellCaller = new PowershellCaller();
-	}
-
-	public void handleDeployment(List<AbstractResourceNode> resourceFamily) throws Exception {
+	public void handleDeployment(Deployment deployment) throws Exception {
+		List<AbstractResourceNode> resourceFamily = deployment.getResourceFamily();
 		switch (resourceFamily.get(0).getResourceType()) {
 			case FUNCTION:
 				break;
@@ -29,15 +26,7 @@ public class DeploymentHandler {
 			case SERVICEBUS_SUBSCRIPTION:
 			case SERVICEBUS_TOPIC:
 			case SERVICEBUS_NAMESPACE:
-				String scriptPath = SERVICEBUS_TEMPLATE_DIR;
-				String[] params = new String[]{
-						resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_NAMESPACE).findFirst().get().getName(),
-						resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_TOPIC).findFirst().get().getName(),
-						resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_SUBSCRIPTION).findFirst().get().getName(),
-						RESOURCE_GROUP_DEFAULT_VALUE
-				};
-
-				powershellCaller.executeScriptWithParams(scriptPath, params);
+				sbsubCaller.executeScriptWithParams(resourceFamily, RESOURCE_GROUP_DEFAULT_VALUE);
 				break;
 			case VNET:
 				break;

@@ -7,15 +7,9 @@ import java.util.List;
 
 public class Deployment {
 	private List<AbstractResourceNode> resourceFamily;
-	private final DeploymentHandler deploymentHandler;
 
 	public Deployment() {
 		this.resourceFamily = new ArrayList<>();
-		deploymentHandler = new DeploymentHandler();
-	}
-
-	public void deploy() throws Exception {
-		deploymentHandler.handleDeployment(resourceFamily);
 	}
 
 	public List<AbstractResourceNode> getResourceFamily() {

@@ -1,7 +1,9 @@
 package com.werner.bl.resourcecreation.model.graph.node;
 
 import com.werner.bl.resourcecreation.model.ResourceType;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ResourceNodeFactory {
 
 	public AbstractResourceNode create(String name, ResourceType type){
