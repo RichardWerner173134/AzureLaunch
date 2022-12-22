@@ -1,4 +1,3 @@
-# example
 # .\create.ps1 -location germanywestcentral -rgName myFirstOwnRg
 # Parameters definition
 param(

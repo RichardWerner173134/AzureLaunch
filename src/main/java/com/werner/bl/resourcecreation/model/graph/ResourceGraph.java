@@ -1,32 +1,22 @@
 package com.werner.bl.resourcecreation.model.graph;
 
+import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResourceGraph {
-	private List<AbstractResourceNode> nodes;
-	private List<ResourceEdge> edges;
+	private ResourceGroup resourceGroup;
 
-	public ResourceGraph(List<AbstractResourceNode> nodes, List<ResourceEdge> edges) {
-		this.nodes = nodes;
-		this.edges = edges;
-	}
+	private List<AbstractResourceNode> nodes = new ArrayList<>();
 
-	public List<AbstractResourceNode> getNodes() {
-		return nodes;
-	}
-
-	public void setNodes(List<AbstractResourceNode> nodes) {
-		this.nodes = nodes;
-	}
-
-	public List<ResourceEdge> getEdges() {
-		return edges;
-	}
-
-	public void setEdges(List<ResourceEdge> edges) {
-		this.edges = edges;
-	}
+	private List<ResourceEdge> edges = new ArrayList<>();
 }

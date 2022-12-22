@@ -35,7 +35,9 @@ definitions:
     properties:
       subscription: 
         type: string
-      resourceGroup:
+      resourceGroupName:
+        type: string
+      resourceGroupLocation:
         type: string
   graph:
     type: object

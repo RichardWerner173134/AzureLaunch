@@ -1,22 +1,20 @@
 package com.werner.bl.resourcecreation.model.deployment;
 
-import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.graph.IDeployableResource;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Deployment {
-	private List<AbstractResourceNode> resourceFamily;
 
-	public Deployment() {
-		this.resourceFamily = new ArrayList<>();
-	}
+	private List<IDeployableResource> resourceFamily = new ArrayList<>();
 
-	public List<AbstractResourceNode> getResourceFamily() {
-		return resourceFamily;
-	}
-
-	public void setResourceFamily(List<AbstractResourceNode> resourceFamily) {
-		this.resourceFamily = resourceFamily;
-	}
 }

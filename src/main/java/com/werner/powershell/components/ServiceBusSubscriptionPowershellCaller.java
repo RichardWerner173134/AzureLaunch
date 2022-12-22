@@ -1,5 +1,6 @@
 package com.werner.powershell.components;
 
+import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.powershell.AbstractPowershellCaller;
@@ -17,7 +18,7 @@ public class ServiceBusSubscriptionPowershellCaller extends AbstractPowershellCa
 
     private final String SCRIPT_NAME = "serviceBusT.json";
 
-    private final String SERVICEBUS_TEMPLATE_DIR = TEMPLATE_DIRECTORY + "serviceBusPubSub/";
+    private final String SERVICEBUS_TEMPLATE_DIR = TEMPLATE_DIR + "serviceBusPubSub/";
 
     @Override
     protected String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
@@ -26,5 +27,10 @@ public class ServiceBusSubscriptionPowershellCaller extends AbstractPowershellCa
         String sbsub = resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_SUBSCRIPTION).findFirst().get().getName();
 
         return String.format(SCRIPT, sbns, sbtopic, sbsub, resourceGroup, SERVICEBUS_TEMPLATE_DIR + SCRIPT_NAME);
+    }
+
+    @Override
+    protected String getScript(ResourceGroup rgNode) {
+        throw new UnsupportedOperationException("Resources need a ResourceGroup to live in");
     }
 }

@@ -2,6 +2,7 @@ package com.werner.powershell;
 
 import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
+import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public abstract class AbstractPowershellCaller {
 
-	protected final static String TEMPLATE_DIRECTORY = "src/main/resources/templates/";
+	protected final static String TEMPLATE_DIR = "src/main/resources/templates/";
 
 	@Autowired
 	@Qualifier("configMap")
@@ -19,7 +20,27 @@ public abstract class AbstractPowershellCaller {
 
 	protected abstract String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup);
 
-	public void executeScriptWithParams(List<AbstractResourceNode> resourceFamily, String resourceGroup) throws Exception {
+	protected abstract String getScript(ResourceGroup rgNode);
+
+	public void createResourceGroup(ResourceGroup rg) throws Exception {
+		String cmd = getScript(rg);
+
+		PowerShell powerShell = PowerShell.openSession();
+		PowerShellResponse powerShellResponse = powerShell
+				.configuration(test)
+				.executeCommand(cmd);
+		powerShell.close();
+
+		if (powerShellResponse.isError()) {
+			throw new Exception("An error occured while creating resources: " + powerShellResponse.getCommandOutput());
+		} else if(powerShellResponse.isTimeout()){
+			throw new Exception("Timeout while creating resources: " + powerShellResponse.getCommandOutput());
+		}
+
+		handleResponse(powerShellResponse);
+	}
+
+	public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup) throws Exception {
 		String cmd = getScript(resourceFamily, resourceGroup);
 
 		PowerShell powerShell = PowerShell.openSession();

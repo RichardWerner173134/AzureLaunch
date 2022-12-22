@@ -1,6 +1,7 @@
 package com.werner.bl.resourcecreation;
 
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
+import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.dependency.Dependency;
 import com.werner.bl.resourcecreation.model.dependency.DependencyHierarchy;
@@ -23,11 +24,16 @@ import java.util.List;
 @Component
 public class ResourceCreationManager {
 	private final DependencyHierarchy dependencyHierarchy;
+
 	private final ResourceNodeFactory resourceNodeFactory;
 
 	private final DeploymentHandler deploymentHandler;
 
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
+		ResourceGroup resourceGroup = new ResourceGroup(
+				request.getAzAccount().getResourceGroupName(),
+				request.getAzAccount().getResourceGroupLocation());
+
 		List<AbstractResourceNode> nodes = new ArrayList<>();
 		List<ResourceEdge> edges = new ArrayList<>();
 
@@ -54,13 +60,19 @@ public class ResourceCreationManager {
 
 			edges.add(new ResourceEdge(node1, node2));
 		}
-		return new ResourceGraph(nodes, edges);
+		return new ResourceGraph(resourceGroup, nodes, edges);
 	}
 
 	public ResourceCreationPlan computeResourceCreationPlan(ResourceGraph resourceGraph) {
-		List<Deployment> deployments = new ArrayList<>();
 		ResourceCreationPlan resourceCreationPlan = new ResourceCreationPlan();
+		List<Deployment> deployments = new ArrayList<>();
 		resourceCreationPlan.setDeployments(deployments);
+
+		ResourceGroup resourceGroup = resourceGraph.getResourceGroup();
+		Deployment rgDeployment = new Deployment();
+		rgDeployment.getResourceFamily().add(resourceGroup);
+
+		deployments.add(rgDeployment);
 
 		// add dependencies to ResourceGraph
 		for (AbstractResourceNode node : resourceGraph.getNodes()) {
@@ -79,7 +91,7 @@ public class ResourceCreationManager {
 		}
 	}
 
-	public void addParentResources(AbstractResourceNode node, Deployment deployment){
+	private void addParentResources(AbstractResourceNode node, Deployment deployment){
 		Dependency dependency = dependencyHierarchy.findByType(node.getResourceType());
 
 		if(dependency != null) {

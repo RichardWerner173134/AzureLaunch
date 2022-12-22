@@ -1,7 +1,8 @@
 {
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
-		"resourceGroup": "rg-lkaujshlkasjhdlkjhsdlkajh"
+		"resourceGroupName": "rg-testwerner",
+		"resourceGroupLocation": "westus"
 	},
 	"graph": {
 		"nodes": [

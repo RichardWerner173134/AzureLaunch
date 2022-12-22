@@ -1,29 +1,16 @@
 package com.werner.bl.resourcecreation.model.graph.node;
 
 import com.werner.bl.resourcecreation.model.ResourceType;
+import com.werner.bl.resourcecreation.model.graph.IDeployableResource;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public abstract class AbstractResourceNode {
+@Getter
+@Setter
+@AllArgsConstructor
+public abstract class AbstractResourceNode implements IDeployableResource {
 	private String name;
+
 	private ResourceType resourceType;
-
-	public AbstractResourceNode(String name, ResourceType resourceType) {
-		this.name = name;
-		this.resourceType = resourceType;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public ResourceType getResourceType() {
-		return resourceType;
-	}
-
-	public void setResourceType(ResourceType resourceType) {
-		this.resourceType = resourceType;
-	}
 }
