@@ -11,7 +11,8 @@ public enum ResourceType {
 	APP_SERVICE_ENVIRONMENT("Microsoft.Web/hostingEnvironments", "ase"),
 	VNET("Microsoft.Network/virtualNetworks", "vnet"),
 	KEYVAULT("Microsoft.KeyVault/vaults", "kv"),
-	KEYVAULT_SECRET("Microsoft.KeyVault/vaults/secrets", "kvsec");
+	KEYVAULT_SECRET("Microsoft.KeyVault/vaults/secrets", "kvsec"),
+	RESOURCE_GROUP("ResourceGroup", "rg");
 
 	private String name;
 	private String shortName;

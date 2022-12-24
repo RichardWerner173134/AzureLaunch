@@ -1,14 +1,11 @@
 package com.werner.bl.resourcecreation.model.deployment;
 
-import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
 import com.werner.powershell.components.FunctionAppPowershellCaller;
 import com.werner.powershell.components.ResourceGroupPowershellCaller;
 import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -32,35 +29,32 @@ public class DeploymentHandler {
 
 	public void handleDeployment(Deployment deployment) throws Exception {
 
-		if(deployment.getResourceFamily().get(0) instanceof ResourceGroup) {
-			rgPSCaller.createResourceGroup((ResourceGroup) deployment.getResourceFamily().get(0));
-			cachedRgNameForCurrentDeployments = ((ResourceGroup) deployment.getResourceFamily().get(0)).getResourceGroupName();
-		} else {
-			List<AbstractResourceNode> castedList = deployment.getResourceFamily().stream()
-					.map(a -> (AbstractResourceNode) a)
-					.collect(Collectors.toList());
+		AbstractResourceNode firstResource = deployment.getDeploymentComposite().get(0);
 
-			switch (castedList.get(0).getResourceType()) {
-				case FUNCTION:
-				case FUNCTION_APP:
-					funAppPSCaller.createResourceInResourceGroup(castedList, cachedRgNameForCurrentDeployments);
-					break;
-				case KEYVAULT:
-					break;
-				case KEYVAULT_SECRET:
-					break;
-				case SERVICEBUS_SUBSCRIPTION:
-				case SERVICEBUS_TOPIC:
-				case SERVICEBUS_NAMESPACE:
-					sbsubPSCaller.createResourceInResourceGroup(castedList, cachedRgNameForCurrentDeployments);
-					break;
-				case VNET:
-					break;
-				case STORAGE_ACCOUNT:
-					break;
-				case APP_SERVICE_ENVIRONMENT:
-					break;
-			}
+		switch (firstResource.getResourceType()) {
+			case RESOURCE_GROUP:
+				rgPSCaller.createResourceGroup((ResourceGroup) firstResource);
+				cachedRgNameForCurrentDeployments = firstResource.getName();
+				break;
+			case FUNCTION:
+			case FUNCTION_APP:
+				funAppPSCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments);
+				break;
+			case KEYVAULT:
+				break;
+			case KEYVAULT_SECRET:
+				break;
+			case SERVICEBUS_SUBSCRIPTION:
+			case SERVICEBUS_TOPIC:
+			case SERVICEBUS_NAMESPACE:
+				sbsubPSCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments);
+				break;
+			case VNET:
+				break;
+			case STORAGE_ACCOUNT:
+				break;
+			case APP_SERVICE_ENVIRONMENT:
+				break;
 		}
 	}
 }

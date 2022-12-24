@@ -1,5 +1,6 @@
 package com.werner.bl.processor;
 
+import com.werner.bl.functionapp.FunctionAppCodeGenerationManager;
 import com.werner.bl.input.UserInputReader;
 import com.werner.bl.resourcecreation.ResourceCreationManager;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
@@ -20,6 +21,8 @@ public class UserInputProcessor {
 
 	private final UserInputValidator userInputValidator;
 
+	private final FunctionAppCodeGenerationManager functionAppCodeGenerationManager;
+
 	public void process(String filePath) throws Exception {
 
 		AzCodegenRequest parseFileRequest = userInputReader.readUserInput(new File(filePath));
@@ -27,6 +30,8 @@ public class UserInputProcessor {
 
 		ResourceGraph resourceGraph = resourceCreationManager.computeResourceGraph(parseFileRequest);
 		ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
-		resourceCreationManager.createResources(resourceCreationPlan);
+		//resourceCreationManager.createAzResources(resourceCreationPlan);
+
+		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph);
 	}
 }

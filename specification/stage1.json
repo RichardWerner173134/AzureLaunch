@@ -7,19 +7,28 @@
 	"graph": {
 		"nodes": [
 			{
-				"name": "subscription01",
+				"name": "sub1",
 				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
 				"name": "function01",
 				"type": "Microsoft.Web/sites/functions"
+			},
+			{
+				"name": "function02",
+				"type": "Microsoft.Web/sites/functions"
 			}
 		],
 		"edges": [
 			{
-				"node1": "function01",
-				"node2": "subscription01",
-				"type": "write"
+				"node1": "sub1",
+				"node2": "function01",
+				"type": "sb-pub-sub"
+			},
+			{
+				"node1": "function02",
+				"node2": "function01",
+				"type": "http-get"
 			}
 		]
 	}

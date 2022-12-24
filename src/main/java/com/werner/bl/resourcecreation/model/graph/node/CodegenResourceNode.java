@@ -6,4 +6,6 @@ public class CodegenResourceNode extends AbstractResourceNode {
 	public CodegenResourceNode(String name, ResourceType resourceType) {
 		super(name, resourceType);
 	}
+
+
 }

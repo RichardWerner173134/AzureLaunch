@@ -1,7 +1,6 @@
 package com.werner.bl.resourcecreation;
 
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
-import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.dependency.Dependency;
 import com.werner.bl.resourcecreation.model.dependency.DependencyHierarchy;
@@ -10,6 +9,8 @@ import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.graph.node.EdgeType;
+import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceNodeFactory;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
@@ -32,6 +33,7 @@ public class ResourceCreationManager {
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
 		ResourceGroup resourceGroup = new ResourceGroup(
 				request.getAzAccount().getResourceGroupName(),
+				ResourceType.RESOURCE_GROUP,
 				request.getAzAccount().getResourceGroupLocation());
 
 		List<AbstractResourceNode> nodes = new ArrayList<>();
@@ -58,7 +60,10 @@ public class ResourceCreationManager {
 				e.printStackTrace();
 			}
 
-			edges.add(new ResourceEdge(node1, node2));
+			String type = edge.getType();
+			EdgeType edgeType = EdgeType.findById(type);
+
+			edges.add(new ResourceEdge(node1, node2, edgeType));
 		}
 		return new ResourceGraph(resourceGroup, nodes, edges);
 	}
@@ -70,14 +75,14 @@ public class ResourceCreationManager {
 
 		ResourceGroup resourceGroup = resourceGraph.getResourceGroup();
 		Deployment rgDeployment = new Deployment();
-		rgDeployment.getResourceFamily().add(resourceGroup);
+		rgDeployment.getDeploymentComposite().add(resourceGroup);
 
 		deployments.add(rgDeployment);
 
 		// add dependencies to ResourceGraph
 		for (AbstractResourceNode node : resourceGraph.getNodes()) {
 			Deployment deployment = new Deployment();
-			deployment.getResourceFamily().add(node);
+			deployment.getDeploymentComposite().add(node);
 			addParentResources(node, deployment);
 			deployments.add(deployment);
 		}
@@ -85,7 +90,7 @@ public class ResourceCreationManager {
 		return resourceCreationPlan;
 	}
 
-	public void createResources(ResourceCreationPlan resourceCreationPlan) throws Exception {
+	public void createAzResources(ResourceCreationPlan resourceCreationPlan) throws Exception {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.handleDeployment(deployment);
 		}
@@ -97,7 +102,7 @@ public class ResourceCreationManager {
 		if(dependency != null) {
 			String name = dependency.getDependencyType().getShortName() + "for" + node.getName();
 			AbstractResourceNode parentNode = resourceNodeFactory.create(name, dependency.getDependencyType());
-			deployment.getResourceFamily().add(parentNode);
+			deployment.getDeploymentComposite().add(parentNode);
 			addParentResources(parentNode, deployment);
 		}
 	}

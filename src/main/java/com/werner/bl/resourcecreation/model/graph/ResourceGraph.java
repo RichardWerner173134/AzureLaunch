@@ -1,8 +1,8 @@
 package com.werner.bl.resourcecreation.model.graph;
 
-import com.werner.bl.resourcecreation.model.ResourceGroup;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
+import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
