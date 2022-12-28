@@ -1,0 +1,7 @@
+PLACEHOLDER_PACKAGE
+
+PLACEHOLDER_IMPORT
+
+public class GeneratedClass {
+    PLACEHOLDER_CODE
+}

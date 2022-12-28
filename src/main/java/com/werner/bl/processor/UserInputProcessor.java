@@ -30,8 +30,8 @@ public class UserInputProcessor {
 
 		ResourceGraph resourceGraph = resourceCreationManager.computeResourceGraph(parseFileRequest);
 		ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
-		//resourceCreationManager.createAzResources(resourceCreationPlan);
+		resourceCreationManager.createAzResources(resourceCreationPlan);
 
-		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph);
+		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph, resourceCreationPlan);
 	}
 }

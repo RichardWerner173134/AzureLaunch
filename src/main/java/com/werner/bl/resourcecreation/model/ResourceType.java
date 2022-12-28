@@ -1,5 +1,8 @@
 package com.werner.bl.resourcecreation.model;
 
+import lombok.Getter;
+
+@Getter
 public enum ResourceType {
 
 	SERVICEBUS_NAMESPACE("Microsoft.ServiceBus/namespaces", "sbns"),
@@ -29,9 +32,5 @@ public enum ResourceType {
 			}
 		}
 		return null;
-	}
-
-	public String getShortName(){
-		return shortName;
 	}
 }

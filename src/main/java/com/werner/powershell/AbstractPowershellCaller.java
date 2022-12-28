@@ -11,23 +11,24 @@ public abstract class AbstractPowershellCaller {
 
 	@Autowired
 	@Qualifier("configMap")
-	private Map<String, String> test;
+	protected Map<String, String> config;
 
 	protected void executePowershellCommand(String command) throws Exception {
 		PowerShell powerShell = PowerShell.openSession();
 		PowerShellResponse powerShellResponse = powerShell
-				.configuration(test)
+				.configuration(config)
 				.executeCommand(command);
 		powerShell.close();
-
-		if (powerShellResponse.isError()) {
-			throw new Exception("An error occured while creating resources: " + powerShellResponse.getCommandOutput());
-		} else if(powerShellResponse.isTimeout()){
-			throw new Exception("Timeout while creating resources: " + powerShellResponse.getCommandOutput());
-		}
 
 		handleResponse(powerShellResponse);
 	}
 
-	public abstract void handleResponse(PowerShellResponse powerShellResponse);
+	protected PowerShellResponse executePowershellWithResponse(String command) {
+		PowerShell powershell = PowerShell.openSession();
+		PowerShellResponse powerShellResponse = powershell.executeCommand(command);
+		powershell.close();
+		return powerShellResponse;
+	}
+
+	public abstract void handleResponse(PowerShellResponse powerShellResponse) throws Exception;
 }

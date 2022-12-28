@@ -17,18 +17,24 @@ public abstract class AbstractPowershellResourceCreationCaller extends AbstractP
 
     public void createResourceGroup(ResourceGroup rg) throws Exception {
         String cmd = getScript(rg);
+        System.out.println(cmd);
         executePowershellCommand(cmd);
     }
 
     public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup) throws Exception {
         String cmd = getScript(resourceFamily, resourceGroup);
+        System.out.println(cmd);
         executePowershellCommand(cmd);
     }
 
-
     @Override
-    public void handleResponse(PowerShellResponse powerShellResponse){
-        // TODO Powershellcommand execution only throws if timeout or Powershellerror
-        // handle Azure response stuff
+    public void handleResponse(PowerShellResponse powerShellResponse) throws Exception {
+        // do nothing, because Powershell Library cant handle errors
+        // all resources are created correctly
+        // if (powerShellResponse.isError()) {
+        //     throw new Exception("An error occured while creating resources: " + powerShellResponse.getCommandOutput());
+        // } else if(powerShellResponse.isTimeout()){
+        //     throw new Exception("Timeout while creating resources: " + powerShellResponse.getCommandOutput());
+        // }
     }
 }

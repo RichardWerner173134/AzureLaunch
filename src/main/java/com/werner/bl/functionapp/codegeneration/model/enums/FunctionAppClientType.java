@@ -7,15 +7,15 @@ public enum FunctionAppClientType {
     HTTP_GET("http-get"),
     HTTP_POST("http-post");
 
-    private String type;
+    private String name;
 
-    private FunctionAppClientType(String type) {
-        this.type = type;
+    private FunctionAppClientType(String name) {
+        this.name = name;
     }
 
     public static FunctionAppClientType findById(String id) {
         for (FunctionAppClientType value : values()) {
-            if(id.equals(value.getType())) {
+            if(id.equals(value.getName())) {
                 return value;
             }
         }
