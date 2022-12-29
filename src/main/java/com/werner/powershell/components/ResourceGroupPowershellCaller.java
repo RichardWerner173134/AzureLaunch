@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class ResourceGroupPowershellCaller extends AbstractPowershellResourceCreationCaller {
 
-    private final String SCRIPT = "New-AzResourceGroup -Name %s -Location %s -Force";
+    private final String SCRIPT = "New-AzResourceGroup -Name %s -Location %s -Force; ";
 
     protected String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
         throw new UnsupportedOperationException("ResourceGroup cant have a ResourceGroup");

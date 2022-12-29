@@ -46,3 +46,30 @@ The edges need to be directed to be able to generate code in an Azure Function.
 	}
 }
 ```
+
+## Current questions
+- Each FunctionApp needs a StorageAccount
+- Each FunctionApp needs a HostingPlan assigned
+- Currently the StorageAccount is created inside the ARM Template for the FunctionApp
+- Currently the HostingPlan is created inside the ARM Template for the FunctionApp
+- All FunctionApps are created inside of a single ResourceGroup
+- One ResourceGroup is created separately in the beginning
+
+Problems:
+```arm
+New-AzResourceGroup -Name rg-testwerner3 -Location westus -Force
+```
+
+```arm
+$parameters = @{}; 
+$parameters.Add('siteName', 'funcappforfunction01'); 
+New-AzResourceGroupDeployment -ResourceGroupName rg-testwerner3 -TemplateFile src/main/resources/templates/functionapp/functionAppT.json -TemplateParameterObject $parameters
+```
+
+```arm
+$parameters = @{}; 
+$parameters.Add('siteName', 'funcappforfunction02'); 
+New-AzResourceGroupDeployment -ResourceGroupName rg-testwerner3 -TemplateFile src/main/resources/templates/functionapp/functionAppT.json -TemplateParameterObject $parameters
+```
+
+## 

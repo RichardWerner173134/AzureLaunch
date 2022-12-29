@@ -10,7 +10,6 @@ public class FileZipper extends AbstractPowershellCaller {
     private final static String SCRIPT = "Compress-Archive -Path %s\\* -DestinationPath %s; ";
 
     public void zipFiles(String folderToZip, String zipFile) throws Exception {
-        config.put("maxWait", "5000");
         String cmd = String.format(SCRIPT, folderToZip, zipFile);
         executePowershellCommand(cmd);
     }

@@ -12,10 +12,7 @@ import com.werner.powershell.PowershellMavenAzFunCaller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,29 +40,74 @@ public class FunctionAppCodeGenerator {
 
     private final String PLACEHOLDER_PACKAGE = "PLACEHOLDER_PACKAGE";
 
+    private static String RESOLVED_TEMP_DIR = null;
+
     public FunctionAppCodeGenerationResult generateFunctionAppProject(FunctionApp functionApp, ResourceGroup resourceGroup) {
 
-        String tempDir = powershellMavenAzFunCaller.getTempDir();
+        if(RESOLVED_TEMP_DIR == null) {
+            RESOLVED_TEMP_DIR = powershellMavenAzFunCaller.getTempDir();
+        }
+
         String mavenProjectName = functionApp.getFunctionAppName();
         String mavenPackageName = "package com.werner." + mavenProjectName + ";";
 
         try {
             powershellMavenAzFunCaller.generateProject(mavenProjectName);
-            //Thread.sleep(10000);
 
             String functionAppBaseClassCode = templateResolver.resolveTemplate(TemplateName.FUNCTION_APP_BASE_CLASS);
             List<CodeGenerationResult> codeComponents = generateCode(functionApp);
             String fullCode = replacePlaceholders(functionAppBaseClassCode, codeComponents, mavenPackageName);
 
-            insertCode(tempDir, mavenProjectName, fullCode);
+            writeToPom(mavenProjectName, codeComponents);
+            writeToClassFile(mavenProjectName, fullCode);
 
             powershellMavenAzFunCaller.buildProject(mavenProjectName);
 
             // TODO check if function artifact was built
-            zipBuildArtifactFolder(tempDir, mavenProjectName);
+            String folderToZipPath = new File(RESOLVED_TEMP_DIR + "\\" + mavenProjectName + "\\target\\azure-functions").listFiles()[0].getCanonicalPath();
+            String zipPath = RESOLVED_TEMP_DIR + "\\" + mavenProjectName + "\\zippie.zip";
+            zipBuildArtifactFolder(folderToZipPath, zipPath);
 
-            return new FunctionAppCodeGenerationResult(tempDir + "\\" + mavenProjectName, mavenProjectName, resourceGroup.getName());
+            return new FunctionAppCodeGenerationResult(zipPath, mavenProjectName, resourceGroup.getName());
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeToPom(String mavenProjectName, List<CodeGenerationResult> codeComponents) {
+        String dependencies = "";
+
+        for (CodeGenerationResult codeComponent : codeComponents) {
+            for (String dependency : codeComponent.getNecessaryDependencies()) {
+                dependencies += dependency;
+            }
+        }
+
+        if(dependencies.equals("")) {
+            return;
+        }
+
+        try {
+            String content = "";
+
+            File file = new File(RESOLVED_TEMP_DIR + "\\" + mavenProjectName + "\\pom.xml");
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                content += line + "\n";
+            }
+
+            bufferedReader.close();
+
+
+            String dependencyStartTag = "<dependencies>\n";
+            content = content.replace(dependencyStartTag, dependencyStartTag + dependencies);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            bufferedWriter.write(content);
+            bufferedWriter.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -110,16 +152,16 @@ public class FunctionAppCodeGenerator {
         }
 
         for (FunctionAppClient client : functionApp.getClientList()) {
-            //CodeGenerationResult result = clientGenerator.generateClient(client);
-            //results.add(result);
+            CodeGenerationResult result = getClientGenerator.generateCode(client);
+            results.add(result);
         }
 
         return results;
     }
 
-    private void insertCode(String tempDir, String functionappName, String fullCode) {
-        String classFile = tempDir + "\\" + functionappName + "\\src\\main\\java\\com\\werner\\" + functionappName + "\\GeneratedClass.java";
-        String unnessecaryClassFile = tempDir + "\\" + functionappName + "\\src\\main\\java\\com\\werner\\" + functionappName + "\\Function.java";
+    private void writeToClassFile(String functionappName, String fullCode) {
+        String classFile = RESOLVED_TEMP_DIR + "\\" + functionappName + "\\src\\main\\java\\com\\werner\\" + functionappName + "\\GeneratedClass.java";
+        String unnessecaryClassFile = RESOLVED_TEMP_DIR + "\\" + functionappName + "\\src\\main\\java\\com\\werner\\" + functionappName + "\\Function.java";
 
         try {
             new File(unnessecaryClassFile).delete();
@@ -133,11 +175,9 @@ public class FunctionAppCodeGenerator {
 
     }
 
-    private void zipBuildArtifactFolder(String tempDir, String mavenProjectName) {
+    private void zipBuildArtifactFolder(String folderToZipPath, String zipPath) {
         try {
-            String folderToZipPath = new File(tempDir + "\\" + mavenProjectName + "\\target\\azure-functions").listFiles()[0].getCanonicalPath();
-            String outputFile = tempDir + "\\" + mavenProjectName + "\\zippie.zip";
-            fileZipper.zipFiles(folderToZipPath, outputFile);
+            fileZipper.zipFiles(folderToZipPath, zipPath);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -11,11 +11,11 @@ import java.util.List;
 public class FunctionAppPowershellCaller extends AbstractPowershellResourceCreationCaller {
     private final String SCRIPT = "$parameters = @{}; "
             + "$parameters.Add('siteName', '%s'); "
-            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters";
+            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters; ";
 
     private final String SCRIPT_NAME = "functionAppT.json";
 
-    private final String FUNCTIONAPP_TEMPLATE_DIR = TEMPLATE_DIR + "functionapp/";
+    private final String FUNCTIONAPP_TEMPLATE_DIR = TEMPLATE_DIR + "functionapp\\";
 
     protected String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
         String sitename = resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.FUNCTION_APP).findFirst().get().getName();

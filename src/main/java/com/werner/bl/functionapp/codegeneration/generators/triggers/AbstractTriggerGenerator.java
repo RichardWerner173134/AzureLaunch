@@ -12,10 +12,13 @@ public abstract class AbstractTriggerGenerator extends AbstractCodeComponentGene
 
     protected abstract List<String> getImportCode();
 
+    protected abstract List<String> getNecessaryDependencies();
+
     public CodeGenerationResult generateCode(FunctionAppTrigger trigger) {
         String triggerCode = generateTriggerCode(trigger);
         List<String> importCode = getImportCode();
+        List<String> necessaryDependencies = getNecessaryDependencies();
 
-        return new CodeGenerationResult(triggerCode, importCode);
+        return new CodeGenerationResult(triggerCode, importCode, necessaryDependencies);
     }
 }

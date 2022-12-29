@@ -9,7 +9,7 @@ public class FunctionAppCodeGenerationResult {
 
     private String archivePath;
 
-    private String functionName;
+    private String functionAppName;
 
     private String resourceGroupName;
 }

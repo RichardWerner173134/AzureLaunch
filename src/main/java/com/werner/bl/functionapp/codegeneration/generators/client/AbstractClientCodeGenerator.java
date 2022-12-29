@@ -12,11 +12,15 @@ public abstract class AbstractClientCodeGenerator extends AbstractCodeComponentG
 
     protected abstract List<String> getImportCode();
 
+    protected abstract List<String> getNecessaryDependencies();
+
     public CodeGenerationResult generateCode(FunctionAppClient client) {
         String code = generateClientCode(client);
         List<String> necessaryImports = getImportCode();
+        List<String> necessaryDependencies = getNecessaryDependencies();
 
-        return new CodeGenerationResult(code, necessaryImports);
+
+        return new CodeGenerationResult(code, necessaryImports, necessaryDependencies);
     }
 
 }

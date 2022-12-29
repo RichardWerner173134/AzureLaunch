@@ -40,4 +40,9 @@ public class HttpGetTrigger extends AbstractTriggerGenerator {
                 "import java.util.Optional;"
         );
     }
+
+    @Override
+    protected List<String> getNecessaryDependencies() {
+        return List.of();
+    }
 }

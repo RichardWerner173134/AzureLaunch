@@ -9,22 +9,22 @@ import java.util.List;
 
 public abstract class AbstractPowershellResourceCreationCaller extends AbstractPowershellCaller {
 
-    protected final static String TEMPLATE_DIR = "src/main/resources/templates/";
+    protected final static String TEMPLATE_DIR = "src\\main\\resources\\templates\\";
 
     protected abstract String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup);
 
     protected abstract String getScript(ResourceGroup rgNode);
 
-    public void createResourceGroup(ResourceGroup rg) throws Exception {
+    public String createResourceGroup(ResourceGroup rg) throws Exception {
         String cmd = getScript(rg);
-        System.out.println(cmd);
-        executePowershellCommand(cmd);
+        // executePowershellCommand(cmd);
+        return cmd;
     }
 
-    public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup) throws Exception {
+    public String createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup) throws Exception {
         String cmd = getScript(resourceFamily, resourceGroup);
-        System.out.println(cmd);
-        executePowershellCommand(cmd);
+        // executePowershellCommand(cmd);
+        return cmd;
     }
 
     @Override

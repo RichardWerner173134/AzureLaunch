@@ -12,4 +12,6 @@ public class CodeGenerationResult {
     private String code;
 
     private List<String> necessaryImports;
+
+    private List<String> necessaryDependencies;
 }

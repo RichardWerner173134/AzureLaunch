@@ -47,4 +47,9 @@ public class ServicebusTopicTriggerGenerator extends AbstractTriggerGenerator {
                 "import com.microsoft.azure.functions.annotation.ServiceBusTopicTrigger;"
         );
     }
+
+    @Override
+    protected List<String> getNecessaryDependencies() {
+        return List.of();
+    }
 }

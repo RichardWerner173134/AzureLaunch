@@ -13,11 +13,11 @@ public class ServiceBusSubscriptionPowershellCaller extends AbstractPowershellRe
             + "$parameters.Add('service_BusNamespace_Name', '%s'); "
             + "$parameters.Add('serviceBusTopicName', '%s'); "
             + "$parameters.Add('serviceBusSubscriptionName', '%s'); "
-            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters";
+            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters; ";
 
     private final String SCRIPT_NAME = "serviceBusT.json";
 
-    private final String SERVICEBUS_TEMPLATE_DIR = TEMPLATE_DIR + "serviceBusPubSub/";
+    private final String SERVICEBUS_TEMPLATE_DIR = TEMPLATE_DIR + "serviceBusPubSub\\";
 
     protected String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
         String sbns = resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_NAMESPACE).findFirst().get().getName();

@@ -92,8 +92,10 @@ public class ResourceCreationManager {
 
 	public void createAzResources(ResourceCreationPlan resourceCreationPlan) throws Exception {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
-			deploymentHandler.handleDeployment(deployment);
+			deploymentHandler.writeDeploymentScript(deployment);
 		}
+
+		deploymentHandler.executeDeploymentScript();
 	}
 
 	private void addParentResources(AbstractResourceNode node, Deployment deployment){

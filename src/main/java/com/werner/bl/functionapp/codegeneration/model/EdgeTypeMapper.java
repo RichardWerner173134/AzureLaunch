@@ -15,14 +15,14 @@ public class EdgeTypeMapper {
         ResourceType resourceType2 = edge.getResource2().getResourceType();
         EdgeType edgeType = edge.getEdgeType();
 
-        if(resourceType1 == ResourceType.FUNCTION && resourceType2 == ResourceType.FUNCTION) {
+        if(resourceType1 == ResourceType.FUNCTION_APP && resourceType2 == ResourceType.FUNCTION_APP) {
             switch(edgeType) {
                 case HTTP_GET:
                     return FunctionAppTriggerType.HTTP_GET;
                 case HTTP_POST:
                     return FunctionAppTriggerType.HTTP_POST;
             }
-        } else if(resourceType2 == ResourceType.FUNCTION) {
+        } else if(resourceType2 == ResourceType.FUNCTION_APP) {
             switch(edgeType) {
                 case SERVICE_BUS_PUB_SUB:
                     return FunctionAppTriggerType.SERVICE_BUS_PUB_SUB;
@@ -36,15 +36,16 @@ public class EdgeTypeMapper {
         ResourceType resourceType2 = edge.getResource2().getResourceType();
         EdgeType edgeType = edge.getEdgeType();
 
-        if(resourceType1 == ResourceType.FUNCTION && resourceType2 == ResourceType.FUNCTION) {
+        if(resourceType1 == ResourceType.FUNCTION_APP && resourceType2 == ResourceType.FUNCTION_APP) {
             switch(edgeType) {
                 case HTTP_GET:
                     return FunctionAppClientType.HTTP_GET;
                 case HTTP_POST:
                     return FunctionAppClientType.HTTP_POST;
             }
+            throw new RuntimeException("Unknown EdgeType: " + edgeType);
         }
 
-        return null;
+        throw new RuntimeException("Edge between FUNCTIONAPP and !FUNCTION_APP doesn´t use a client. Use Trigger instead");
     }
 }

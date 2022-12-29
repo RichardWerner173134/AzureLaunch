@@ -43,44 +43,42 @@ public class FunctionAppCodeGenerationManager {
 
         // deploy every FunctionApp
         for (FunctionAppCodeGenerationResult result : results) {
-            functionAppDeploymentHandler.deployFunctionAppCode(result.getResourceGroupName(), result.getFunctionName(), result.getArchivePath());
+            functionAppDeploymentHandler.deployFunctionAppCode(result);
         }
     }
 
-    private List<FunctionApp> computeFunctionAppConstruction(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan){
+    private List<FunctionApp> computeFunctionAppConstruction(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan) {
         ArrayList<FunctionApp> functionApps = new ArrayList<>();
 
         for (ResourceEdge edge : resourceGraph.getEdges()) {
-            if (edge.getResource1().getResourceType() == ResourceType.FUNCTION) {
-                String function1Name = edge.getResource1().getName();
-                FunctionApp function1 = getOrCreateFunctionAppFromList(function1Name, functionApps);
+            if (edge.getResource1().getResourceType() == ResourceType.FUNCTION_APP) {
+                // create FunctionApp objects
+                String functionApp1Name = edge.getResource1().getName();
+                FunctionApp functionApp1 = getOrCreateFunctionAppFromList(functionApp1Name, functionApps);
+                String functionApp2Name = edge.getResource2().getName();
+                FunctionApp functionApp2 = getOrCreateFunctionAppFromList(functionApp2Name, functionApps);
 
-                String function2Name = edge.getResource2().getName();
-                FunctionApp function2 = getOrCreateFunctionAppFromList(function2Name, functionApps);
+                // assign client and trigger
+                FunctionAppTriggerType triggerType = edgeTypeMapper.computeResultingTriggerType(edge);
+                FunctionAppTrigger trigger = new FunctionAppTrigger(triggerType);
+                functionApp2.addTrigger(trigger);
 
                 FunctionAppClientType clientType = edgeTypeMapper.computeResultingClientType(edge);
-                FunctionAppClient client = new FunctionAppClient(edge.getResource1().getName() + "-"
-                        + clientType.getName() + "-client", clientType);
-                //computeConfigurationMapForClient();
-
-                function1.getClientList().add(client);
-
-                FunctionAppTriggerType triggerType = edgeTypeMapper.computeResultingTriggerType(edge);
-                FunctionAppTrigger trigger = new FunctionAppTrigger(edge.getResource2().getName() + "-"
-                        + clientType.getName() + "-trigger", triggerType);
-                function2.getTriggerList().add(trigger);
-
+                FunctionAppClient client = new FunctionAppClient(clientType);
+                // functionApp2 and functionApp2Trigger are used to define url endpoint later
+                Map<String, String> configurationMap = computeConfigurationMapForClient(functionApp2.getFunctionAppName(), trigger.getTriggerName());
+                client.getClientParams().putAll(configurationMap);
+                functionApp1.addClient(client);
             } else {
-                String function2Name = edge.getResource2().getName();
-                FunctionApp function2 = getOrCreateFunctionAppFromList(function2Name, functionApps);
+                String functionApp2Name = edge.getResource2().getName();
+                FunctionApp functionApp2 = getOrCreateFunctionAppFromList(functionApp2Name, functionApps);
 
                 FunctionAppTriggerType triggerType = edgeTypeMapper.computeResultingTriggerType(edge);
-                FunctionAppTrigger trigger = new FunctionAppTrigger(edge.getResource2().getName() + "-"
-                        + triggerType.getName() + "-trigger", triggerType);
+                FunctionAppTrigger trigger = new FunctionAppTrigger(triggerType);
                 Deployment deployment = getDeploymentCompositeForResource(edge.getResource1(), resourceCreationPlan);
                 Map<String, String> configurationMap = computeConfigurationMapForTrigger(deployment, triggerType);
                 trigger.getTriggerParams().putAll(configurationMap);
-                function2.getTriggerList().add(trigger);
+                functionApp2.addTrigger(trigger);
             }
         }
 
@@ -88,15 +86,16 @@ public class FunctionAppCodeGenerationManager {
     }
 
 
-    private FunctionApp getOrCreateFunctionAppFromList (String functionName, List<FunctionApp> functionApps) {
+    private FunctionApp getOrCreateFunctionAppFromList(String functionName, List<FunctionApp> functionApps) {
+        String functionAppName = functionName;
         Optional<FunctionApp> first = functionApps.stream()
-                .filter(f -> f.getFunctionAppName().equals(functionName))
+                .filter(f -> f.getFunctionAppName().equals(functionAppName))
                 .findFirst();
 
-        if(first.isPresent()) {
+        if (first.isPresent()) {
             return first.get();
         } else {
-            FunctionApp functionApp = new FunctionApp(functionName);
+            FunctionApp functionApp = new FunctionApp(functionAppName);
             functionApps.add(functionApp);
             return functionApp;
         }
@@ -118,7 +117,7 @@ public class FunctionAppCodeGenerationManager {
 
     private Map<String, String> computeConfigurationMapForTrigger(Deployment deployment, FunctionAppTriggerType triggerType) {
         HashMap<String, String> map = new HashMap<>();
-        switch(triggerType) {
+        switch (triggerType) {
             case SERVICE_BUS_PUB_SUB:
                 map.put(ResourceType.SERVICEBUS_TOPIC.getName(), deployment.getDeploymentComposite().stream()
                         .filter(d -> d.getResourceType() == ResourceType.SERVICEBUS_TOPIC).findFirst().get().getName());
@@ -136,16 +135,9 @@ public class FunctionAppCodeGenerationManager {
         return map;
     }
 
-    private Map<String, String> computeConfigurationMapForClient(String targetFunctionName, FunctionAppClientType clientType) {
-        HashMap<String, String> map = new HashMap<>();
-        switch(clientType) {
-            case HTTP_GET:
-                map.put("url", "https://" + ".azurewebsites.net/api/" + );
-                break;
-            case HTTP_POST:
-                break;
-        }
-
+    private Map<String, String> computeConfigurationMapForClient(String targetFunctionAppName, String targetFunctionAppTriggerName) {
+        Map<String, String> map = new HashMap<>();
+        map.put("url", "https://" + targetFunctionAppName + ".azurewebsites.net/api/" + targetFunctionAppTriggerName);
         return map;
     }
 }

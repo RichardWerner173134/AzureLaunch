@@ -2,6 +2,7 @@ package com.werner.bl.functionapp.codegeneration.model;
 
 import com.werner.bl.functionapp.codegeneration.model.enums.FunctionAppTriggerType;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 @Getter
 public class FunctionAppTrigger {
 
+    @Setter
     private String triggerName;
 
     private FunctionAppTriggerType triggerType;
@@ -16,8 +18,7 @@ public class FunctionAppTrigger {
     private Map<String, String> triggerParams = new HashMap<>();
 
 
-    public FunctionAppTrigger(String triggerName, FunctionAppTriggerType triggerType) {
-        this.triggerName = triggerName;
+    public FunctionAppTrigger(FunctionAppTriggerType triggerType) {
         this.triggerType = triggerType;
     }
 }
