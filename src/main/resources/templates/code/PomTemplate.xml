@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>PLACEHOLDER_MAVEN_GROUP_ID</groupId>
+    <groupId>com.werner</groupId>
     <artifactId>PLACEHOLDER_FUNCTION_APP_NAME</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
@@ -15,7 +15,7 @@
         <azure.functions.maven.plugin.version>1.22.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>2.2.0</azure.functions.java.library.version>
         <functionAppName>PLACEHOLDER_FUNCTION_APP_NAME</functionAppName>
-        <appServicePlanName>PLACEHOLDER_APP_SERVICE_PLAN</appServicePlanName>
+        <appServicePlanName>PLACEHOLDER_APP_SERVICE_PLAN_NAME</appServicePlanName>
         <resourceGroupName>PLACEHOLDER_RESOURCE_GROUP_NAME</resourceGroupName>
     </properties>
 
@@ -84,8 +84,14 @@
                             <name>FUNCTIONS_EXTENSION_VERSION</name>
                             <value>~4</value>
                         </property>
-                        PLACEHOLDER_PROPERTIES
+                        PLACEHOLDER_ADDITIONAL_PROPERTIES
                     </appSettings>
+                    <auth>
+                        <client>480d18fe-721d-45aa-8215-1fafab7f06e0</client>
+                        <tenant>7dbee4a3-d935-4716-b330-afffbbbe96a7</tenant>
+                        <key>sCn8Q~65O2kfBh-quq1gWzIvLC3gE26VdmJ0JcqI</key>
+                        <environment>azure</environment>
+                    </auth>
                 </configuration>
                 <executions>
                     <execution>

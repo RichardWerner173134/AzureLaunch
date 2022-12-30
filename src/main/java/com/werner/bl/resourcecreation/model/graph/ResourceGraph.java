@@ -16,6 +16,8 @@ import java.util.List;
 public class ResourceGraph {
 	private ResourceGroup resourceGroup;
 
+	private String appServicePlanName;
+
 	private List<AbstractResourceNode> nodes = new ArrayList<>();
 
 	private List<ResourceEdge> edges = new ArrayList<>();

@@ -1,11 +1,18 @@
-package com.werner.bl.functionapp.codegeneration.model;
+package com.werner.bl.codegeneration.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FunctionApp {
+
+    public static String RESOURCE_GROUP_NAME;
+
+    public static String APP_SERVICE_PLAN_NAME;
 
     @Getter
     private String functionAppName;
@@ -15,6 +22,10 @@ public class FunctionApp {
 
     @Getter
     private List<FunctionAppClient> clientList = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private Map<String, String> additionalProperties = new HashMap<>();
 
     private int nextClientNumber = 1;
 

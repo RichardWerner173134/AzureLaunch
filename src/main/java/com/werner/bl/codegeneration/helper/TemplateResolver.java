@@ -1,4 +1,4 @@
-package com.werner.bl.functionapp.codegeneration;
+package com.werner.bl.codegeneration.helper;
 
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class TemplateResolver {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String line = "";
         while((line = bufferedReader.readLine()) != null) {
-            content += "\n" + line;
+            content += line + "\n";
         }
         return content;
     }

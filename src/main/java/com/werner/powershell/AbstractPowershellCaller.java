@@ -25,7 +25,7 @@ public abstract class AbstractPowershellCaller {
 
 	protected PowerShellResponse executePowershellWithResponse(String command) {
 		PowerShell powershell = PowerShell.openSession();
-		PowerShellResponse powerShellResponse = powershell.executeCommand(command);
+		PowerShellResponse powerShellResponse = powershell.configuration(config).executeCommand(command);
 		powershell.close();
 		return powerShellResponse;
 	}

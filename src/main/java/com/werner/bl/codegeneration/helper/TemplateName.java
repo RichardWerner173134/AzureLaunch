@@ -1,4 +1,4 @@
-package com.werner.bl.functionapp.codegeneration;
+package com.werner.bl.codegeneration.helper;
 
 import lombok.Getter;
 
@@ -11,7 +11,9 @@ public enum TemplateName {
 
     TRIGGER_SB_PUB_SUB("triggers/SbPubSubTrigger.java"),
 
-    TRIGGER_HTTP_GET("triggers/HttpGetTrigger.java")
+    TRIGGER_HTTP_GET("triggers/HttpGetTrigger.java"),
+
+    POM_WITH_PLACEHOLDERS("PomTemplate.xml")
     ;
 
 

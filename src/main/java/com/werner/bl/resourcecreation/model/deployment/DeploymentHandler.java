@@ -4,7 +4,6 @@ import com.profesorfalken.jpowershell.PowerShell;
 import com.profesorfalken.jpowershell.PowerShellResponse;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
-import com.werner.powershell.components.FunctionAppPowershellCaller;
 import com.werner.powershell.components.ResourceGroupPowershellCaller;
 import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
 import org.springframework.stereotype.Component;
@@ -28,16 +27,12 @@ public class DeploymentHandler {
 
 	private ServiceBusSubscriptionPowershellCaller sbsubPSCaller;
 
-	private FunctionAppPowershellCaller funAppPSCaller;
-
 	private Set<String> commands = new LinkedHashSet<>();
 
 	public DeploymentHandler(ResourceGroupPowershellCaller rgPSCaller,
-							 ServiceBusSubscriptionPowershellCaller sbsubPSCaller,
-							 FunctionAppPowershellCaller funAppPSCaller) {
+							 ServiceBusSubscriptionPowershellCaller sbsubPSCaller) {
 		this.rgPSCaller = rgPSCaller;
 		this.sbsubPSCaller = sbsubPSCaller;
-		this.funAppPSCaller = funAppPSCaller;
 	}
 
 	public void writeDeploymentScript(Deployment deployment) throws Exception {
@@ -48,10 +43,6 @@ public class DeploymentHandler {
 			case RESOURCE_GROUP:
 				commands.add(rgPSCaller.createResourceGroup((ResourceGroup) firstResource));
 				cachedRgNameForCurrentDeployments = firstResource.getName();
-				break;
-			case FUNCTION:
-			case FUNCTION_APP:
-				commands.add(funAppPSCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments));
 				break;
 			case KEYVAULT:
 				break;

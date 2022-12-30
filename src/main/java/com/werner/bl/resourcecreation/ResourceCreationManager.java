@@ -36,6 +36,8 @@ public class ResourceCreationManager {
 				ResourceType.RESOURCE_GROUP,
 				request.getAzAccount().getResourceGroupLocation());
 
+		String appServicePlanName = request.getAzAccount().getAppServicePlanName();
+
 		List<AbstractResourceNode> nodes = new ArrayList<>();
 		List<ResourceEdge> edges = new ArrayList<>();
 
@@ -65,7 +67,7 @@ public class ResourceCreationManager {
 
 			edges.add(new ResourceEdge(node1, node2, edgeType));
 		}
-		return new ResourceGraph(resourceGroup, nodes, edges);
+		return new ResourceGraph(resourceGroup, appServicePlanName, nodes, edges);
 	}
 
 	public ResourceCreationPlan computeResourceCreationPlan(ResourceGraph resourceGraph) {
@@ -81,6 +83,11 @@ public class ResourceCreationManager {
 
 		// add dependencies to ResourceGraph
 		for (AbstractResourceNode node : resourceGraph.getNodes()) {
+
+			if(node.getResourceType() == ResourceType.FUNCTION_APP) {
+				continue;
+			}
+
 			Deployment deployment = new Deployment();
 			deployment.getDeploymentComposite().add(node);
 			addParentResources(node, deployment);

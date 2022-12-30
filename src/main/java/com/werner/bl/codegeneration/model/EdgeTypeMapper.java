@@ -1,7 +1,7 @@
-package com.werner.bl.functionapp.codegeneration.model;
+package com.werner.bl.codegeneration.model;
 
-import com.werner.bl.functionapp.codegeneration.model.enums.FunctionAppClientType;
-import com.werner.bl.functionapp.codegeneration.model.enums.FunctionAppTriggerType;
+import com.werner.bl.codegeneration.model.enums.FunctionAppClientType;
+import com.werner.bl.codegeneration.model.enums.FunctionAppTriggerType;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.EdgeType;

@@ -1,14 +1,12 @@
-package com.werner.bl.functionapp.codegeneration.generators.triggers;
+package com.werner.bl.codegeneration.generators.componentlevel.triggers;
 
-import com.werner.bl.functionapp.codegeneration.TemplateResolver;
-import com.werner.bl.functionapp.codegeneration.model.FunctionAppTrigger;
+import com.werner.bl.codegeneration.helper.TemplateResolver;
+import com.werner.bl.codegeneration.model.FunctionAppTrigger;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
-import static com.werner.bl.functionapp.codegeneration.TemplateName.TRIGGER_SB_PUB_SUB;
+import static com.werner.bl.codegeneration.helper.TemplateName.TRIGGER_SB_PUB_SUB;
 
 @Component
 @AllArgsConstructor
@@ -37,19 +35,5 @@ public class ServicebusTopicTriggerGenerator extends AbstractTriggerGenerator {
                 .replace(PLACEHOLDER_TOPIC, topic)
                 .replace(PLACEHOLDER_SUBSCRIPTION, subscription)
                 .replace(PLACEHOLDER_CONNECTION, "ServicebusConnection");
-    }
-
-    @Override
-    protected List<String> getImportCode() {
-        return List.of(
-                "import com.microsoft.azure.functions.ExecutionContext;",
-                "import com.microsoft.azure.functions.annotation.FunctionName;",
-                "import com.microsoft.azure.functions.annotation.ServiceBusTopicTrigger;"
-        );
-    }
-
-    @Override
-    protected List<String> getNecessaryDependencies() {
-        return List.of();
     }
 }

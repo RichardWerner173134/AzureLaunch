@@ -12,7 +12,7 @@ public class PowershellConfig {
     @Bean("configMap")
     public Map<String, String> getPowershellConfigMap() {
         Map<String, String> configMap = new HashMap<>();
-        configMap.put("maxWait", "150000");
+        configMap.put("maxWait", "500000");
         return configMap;
     }
 }
