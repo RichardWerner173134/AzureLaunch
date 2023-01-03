@@ -7,13 +7,19 @@ public enum TemplateName {
 
     FUNCTION_APP_BASE_CLASS("FunctionAppBaseClass.java"),
 
-    CLIENT_HTTP_GET("clients/FunctionClientHttpGet.java"),
+    POM_WITH_PLACEHOLDERS("PomTemplate.xml"),
+
+    CLIENT_HTTP_GET("clients/HttpClientGet.java"),
+
+    CLIENT_HTTP_POST("clients/HttpClientPost.java"),
+
+    TRIGGER_SB_QUEUE("triggers/SbQueueTrigger.java"),
 
     TRIGGER_SB_PUB_SUB("triggers/SbPubSubTrigger.java"),
 
     TRIGGER_HTTP_GET("triggers/HttpGetTrigger.java"),
 
-    POM_WITH_PLACEHOLDERS("PomTemplate.xml")
+    TRIGGER_HTTP_POST("triggers/HttpPostTrigger.java"),
     ;
 
 

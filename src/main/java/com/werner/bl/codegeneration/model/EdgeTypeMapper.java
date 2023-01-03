@@ -26,9 +26,11 @@ public class EdgeTypeMapper {
             switch(edgeType) {
                 case SERVICE_BUS_PUB_SUB:
                     return FunctionAppTriggerType.SERVICE_BUS_PUB_SUB;
+                case SERVICE_BUS_QUEUE:
+                    return FunctionAppTriggerType.SERVICE_BUS_QUEUE;
             }
         }
-        return null;
+        throw new RuntimeException("Triggertype not found");
     }
 
     public FunctionAppClientType computeResultingClientType(ResourceEdge edge) {
@@ -46,6 +48,6 @@ public class EdgeTypeMapper {
             throw new RuntimeException("Unknown EdgeType: " + edgeType);
         }
 
-        throw new RuntimeException("Edge between FUNCTIONAPP and !FUNCTION_APP doesn´t use a client. Use Trigger instead");
+        throw new RuntimeException("Edge between FUNCTIONAPP and FUNCTION_APP doesn´t use a client. Use Trigger instead");
     }
 }

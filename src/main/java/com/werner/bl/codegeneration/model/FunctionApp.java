@@ -23,6 +23,7 @@ public class FunctionApp {
     @Getter
     private List<FunctionAppClient> clientList = new ArrayList<>();
 
+    // TODO encapsulation, provide a function findById, because you shouldnt add keyvalue pairs without using addConnectionString(...)
     @Getter
     @Setter
     private Map<String, String> additionalProperties = new HashMap<>();
@@ -30,6 +31,8 @@ public class FunctionApp {
     private int nextClientNumber = 1;
 
     private int nextTriggerNumber = 1;
+
+    private int nextConnectionStringNumber = 1;
 
     public FunctionApp(String functionAppName) {
         this.functionAppName = functionAppName;
@@ -47,5 +50,10 @@ public class FunctionApp {
         trigger.setTriggerName(name);
         nextTriggerNumber += 1;
         triggerList.add(trigger);
+    }
+
+    public void addConnectionString(String functionName, String connectionString) {
+        String valueName = functionName + nextConnectionStringNumber;
+        additionalProperties.put(valueName, connectionString);
     }
 }

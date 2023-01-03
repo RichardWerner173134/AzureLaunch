@@ -2,6 +2,7 @@ package com.werner.bl.codegeneration.generators.classlevel;
 
 import com.werner.bl.codegeneration.generators.componentlevel.client.HttpGetClientGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.HttpGetTriggerGenerator;
+import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusQueueTriggerGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusTopicTriggerGenerator;
 import com.werner.bl.codegeneration.generators.projectlevel.Project;
 import com.werner.bl.codegeneration.helper.TemplateName;
@@ -30,6 +31,8 @@ public class ClassGenerator {
     private final TemplateResolver templateResolver;
 
     private final ServicebusTopicTriggerGenerator servicebusTopicTriggerGenerator;
+
+    private final ServicebusQueueTriggerGenerator servicebusQueueTriggerGenerator;
 
     private final HttpGetClientGenerator httpGetClientGenerator;
 
@@ -84,6 +87,7 @@ public class ClassGenerator {
             case SERVICE_BUS_PUB_SUB:
                 return servicebusTopicTriggerGenerator.generateCodeString(trigger);
             case SERVICE_BUS_QUEUE:
+                return servicebusQueueTriggerGenerator.generateCodeString(trigger);
         }
         throw new RuntimeException("Cannot create Trigger");
     }

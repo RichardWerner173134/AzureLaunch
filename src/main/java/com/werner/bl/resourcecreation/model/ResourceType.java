@@ -8,6 +8,8 @@ public enum ResourceType {
 	SERVICEBUS_NAMESPACE("Microsoft.ServiceBus/namespaces", "sbns"),
 	SERVICEBUS_TOPIC("Microsoft.ServiceBus/namespaces/topics", "sbtop"),
 	SERVICEBUS_SUBSCRIPTION("Microsoft.ServiceBus/namespaces/topics/Subscriptions", "sbsub"),
+
+	SERVICEBUS_QUEUE("Microsoft.ServiceBus/namespaces/queues", "sbqueue"),
 	STORAGE_ACCOUNT("Microsoft.Storage/storageAccounts", "storacc"),
 	FUNCTION_APP("Microsoft.Web/sites", "funcapp"),
 	FUNCTION("Microsoft.Web/sites/functions", "func"),

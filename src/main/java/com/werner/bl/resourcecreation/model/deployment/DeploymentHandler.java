@@ -5,6 +5,7 @@ import com.profesorfalken.jpowershell.PowerShellResponse;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
 import com.werner.powershell.components.ResourceGroupPowershellCaller;
+import com.werner.powershell.components.ServiceBusQueuePowershellCaller;
 import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +22,21 @@ import java.util.Set;
 @Component
 public class DeploymentHandler {
 
+	private ServiceBusQueuePowershellCaller serviceBusQueuePowershellCaller;
+
 	private String cachedRgNameForCurrentDeployments;
 
 	private ResourceGroupPowershellCaller rgPSCaller;
 
-	private ServiceBusSubscriptionPowershellCaller sbsubPSCaller;
+	private ServiceBusSubscriptionPowershellCaller serviceBusSubscriptionPowershellCaller;
 
 	private Set<String> commands = new LinkedHashSet<>();
 
-	public DeploymentHandler(ResourceGroupPowershellCaller rgPSCaller,
-							 ServiceBusSubscriptionPowershellCaller sbsubPSCaller) {
+	public DeploymentHandler(ServiceBusQueuePowershellCaller serviceBusQueuePowershellCaller, ResourceGroupPowershellCaller rgPSCaller,
+							 ServiceBusSubscriptionPowershellCaller serviceBusSubscriptionPowershellCaller) {
+		this.serviceBusQueuePowershellCaller = serviceBusQueuePowershellCaller;
 		this.rgPSCaller = rgPSCaller;
-		this.sbsubPSCaller = sbsubPSCaller;
+		this.serviceBusSubscriptionPowershellCaller = serviceBusSubscriptionPowershellCaller;
 	}
 
 	public void writeDeploymentScript(Deployment deployment) throws Exception {
@@ -48,10 +52,13 @@ public class DeploymentHandler {
 				break;
 			case KEYVAULT_SECRET:
 				break;
-			case SERVICEBUS_SUBSCRIPTION:
-			case SERVICEBUS_TOPIC:
 			case SERVICEBUS_NAMESPACE:
-				commands.add(sbsubPSCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments));
+			case SERVICEBUS_TOPIC:
+			case SERVICEBUS_SUBSCRIPTION:
+				commands.add(serviceBusSubscriptionPowershellCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments));
+				break;
+			case SERVICEBUS_QUEUE:
+				commands.add(serviceBusQueuePowershellCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments));
 				break;
 			case VNET:
 				break;

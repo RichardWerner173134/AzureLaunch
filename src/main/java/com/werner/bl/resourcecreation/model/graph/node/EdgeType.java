@@ -7,6 +7,7 @@ public enum EdgeType {
     HTTP_GET("http-get"),
     HTTP_POST("http-post"),
     SERVICE_BUS_PUB_SUB("sb-pub-sub"),
+
     SERVICE_BUS_QUEUE("sb-queue")
     ;
 

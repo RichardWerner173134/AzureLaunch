@@ -18,6 +18,10 @@
 			{
 				"name": "funcapp00000002",
 				"type": "Microsoft.Web/sites"
+			},
+			{
+				"name": "queue00001",
+				"type": "Microsoft.ServiceBus/namespaces/queues"
 			}
 		],
 		"edges": [
@@ -30,6 +34,11 @@
 				"node1": "subscription01",
 				"node2": "funcapp00000001",
 				"type": "sb-pub-sub"
+			},
+			{
+				"node1": "queue00001",
+				"node2": "funcapp00000001",
+				"type": "sb-queue"
 			}
 		]
 	}

@@ -81,9 +81,8 @@ public class FunctionAppCodeGenerationManager {
                 trigger.getTriggerParams().putAll(configurationMap);
                 functionApp2.addTrigger(trigger);
 
-                // TODO delegate which configs need to be resolved
                 String value = serviceBusResolver.resolveServiceBusConnection();
-                functionApp2.getAdditionalProperties().put("ServiceBusConnectionString", value);
+                functionApp2.addConnectionString(functionApp2Name, value);
             }
         }
 
@@ -133,6 +132,8 @@ public class FunctionAppCodeGenerationManager {
                         .filter(d -> d.getResourceType() == ResourceType.SERVICEBUS_SUBSCRIPTION).findFirst().get().getName());
                 break;
             case SERVICE_BUS_QUEUE:
+                map.put(ResourceType.SERVICEBUS_QUEUE.getName(), deployment.getDeploymentComposite().stream()
+                        .filter(d -> d.getResourceType() == ResourceType.SERVICEBUS_QUEUE).findFirst().get().getName());
                 break;
             case HTTP_GET:
                 break;

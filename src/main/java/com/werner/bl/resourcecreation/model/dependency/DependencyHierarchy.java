@@ -15,7 +15,8 @@ public class DependencyHierarchy {
 
 		dependencyList.addAll(List.of(
 				new Dependency(ResourceType.SERVICEBUS_SUBSCRIPTION, ResourceType.SERVICEBUS_TOPIC),
-				new Dependency(ResourceType.SERVICEBUS_TOPIC, ResourceType.SERVICEBUS_NAMESPACE))
+				new Dependency(ResourceType.SERVICEBUS_TOPIC, ResourceType.SERVICEBUS_NAMESPACE),
+				new Dependency(ResourceType.SERVICEBUS_QUEUE, ResourceType.SERVICEBUS_NAMESPACE))
 		);
 	}
 
