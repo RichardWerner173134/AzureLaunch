@@ -52,8 +52,8 @@ public class FunctionApp {
         triggerList.add(trigger);
     }
 
-    public void addConnectionString(String functionName, String connectionString) {
-        String valueName = functionName + nextConnectionStringNumber;
+    public void addConnectionString(String triggerName, String connectionString) {
+        String valueName = triggerName + nextConnectionStringNumber;
         additionalProperties.put(valueName, connectionString);
     }
 }
