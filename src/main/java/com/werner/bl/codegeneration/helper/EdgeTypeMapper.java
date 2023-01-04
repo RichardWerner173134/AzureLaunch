@@ -1,4 +1,4 @@
-package com.werner.bl.codegeneration.model;
+package com.werner.bl.codegeneration.helper;
 
 import com.werner.bl.codegeneration.model.enums.FunctionAppClientType;
 import com.werner.bl.codegeneration.model.enums.FunctionAppTriggerType;
@@ -24,9 +24,9 @@ public class EdgeTypeMapper {
             }
         } else if(resourceType2 == ResourceType.FUNCTION_APP) {
             switch(edgeType) {
-                case SERVICE_BUS_PUB_SUB:
+                case SERVICE_BUS_PUB_SUB_READ:
                     return FunctionAppTriggerType.SERVICE_BUS_PUB_SUB;
-                case SERVICE_BUS_QUEUE:
+                case SERVICE_BUS_QUEUE_READ:
                     return FunctionAppTriggerType.SERVICE_BUS_QUEUE;
             }
         }

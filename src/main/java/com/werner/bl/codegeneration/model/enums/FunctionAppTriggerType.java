@@ -33,7 +33,10 @@ public enum FunctionAppTriggerType {
             List.of()
     ),
     SERVICE_BUS_QUEUE("sb-queue",
-            List.of(),
+            List.of("import com.microsoft.azure.functions.ExecutionContext;",
+					"import com.microsoft.azure.functions.annotation.FunctionName;",
+					"import com.microsoft.azure.functions.annotation.ServiceBusQueueTrigger;"
+			),
             List.of()
     );
 

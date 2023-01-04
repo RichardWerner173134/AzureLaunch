@@ -1,5 +1,5 @@
     @FunctionName("PLACEHOLDER_FUNCTION_NAME")
-    public void run(
+    public void PLACEHOLDER_JAVA_FUNCTION_NAME(
         @ServiceBusTopicTrigger(
                     name = "message",
                     topicName = "PLACEHOLDER_TOPIC_NAME",

@@ -26,12 +26,12 @@ public class PomGenerator {
 
     private final String PLACEHOLDER_ADDITIONAL_PROPERTIES = "PLACEHOLDER_ADDITIONAL_PROPERTIES";
 
-    private final String PLACEHOLDER_KEY = "PLACEHOLDER_KEY";
+    private final String PLACEHOLDER_APPSETTINGS_KEY = "PLACEHOLDER_KEY";
 
-    private final String PLACEHOLDER_VALUE = "PLACEHOLDER_VALUE";
+    private final String PLACEHOLDER_APPSETTINGS_VALUE = "PLACEHOLDER_VALUE";
 
 
-    public String generateCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, Map<String, String> additionalProperties) {
+    public String generateCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
         String pomTemplate = templateResolver.resolveTemplate(TemplateName.POM_WITH_PLACEHOLDERS);
 
         String result = pomTemplate;
@@ -44,14 +44,31 @@ public class PomGenerator {
         result = result.replace(PLACEHOLDER_ADDITIONAL_DEPENDENCIES, "");
 
 
-        String property = "<property>\n\t\t\t\t\t\t\t<name>PLACEHOLDER_KEY</name>\n\t\t\t\t\t\t\t<value>PLACEHOLDER_VALUE</value>\n\t\t\t\t\t\t</property>";
+        String property = "\t\t\t\t\t\t<property>\n\t\t\t\t\t\t\t<name>PLACEHOLDER_KEY</name>\n\t\t\t\t\t\t\t<value>PLACEHOLDER_VALUE</value>\n\t\t\t\t\t\t</property>\n";
 
-        for (Map.Entry<String, String> entry : additionalProperties.entrySet()) {
-            String k = entry.getKey();
-            String v = entry.getValue();
-            String prop = property.replace(PLACEHOLDER_KEY, k)
-                    .replace(PLACEHOLDER_VALUE, v);
-            result = result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES, prop + "\n" + PLACEHOLDER_ADDITIONAL_PROPERTIES);
+        for (FunctionAppTrigger trigger : triggers) {
+            for (Map.Entry<String, String> entry : trigger.getTriggerParams().entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+                if(k.startsWith(trigger.getTriggerName())) {
+                    String appSetting = property.replace(PLACEHOLDER_APPSETTINGS_KEY, k)
+                            .replace(PLACEHOLDER_APPSETTINGS_VALUE, v);
+                    result = result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES, appSetting + PLACEHOLDER_ADDITIONAL_PROPERTIES);
+                }
+            }
+        }
+
+        for (FunctionAppClient client : clients) {
+            for (Map.Entry<String, String> entry : client.getClientParams().entrySet()) {
+                String k = entry.getKey();
+                String v = entry.getValue();
+                if(k.startsWith(client.getClientName())) {
+                    String appSetting = property.replace(PLACEHOLDER_APPSETTINGS_KEY, k)
+                            .replace(PLACEHOLDER_APPSETTINGS_VALUE, v);
+                    result = result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES,
+                            appSetting + "\n" + PLACEHOLDER_ADDITIONAL_PROPERTIES);
+                }
+            }
         }
 
         return result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES, "");

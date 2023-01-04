@@ -2,7 +2,7 @@ package com.werner.bl.codegeneration.generators.componentlevel.triggers;
 
 import com.werner.bl.codegeneration.helper.TemplateResolver;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
-import com.werner.bl.resourcecreation.model.ResourceType;
+import com.werner.bl.codegeneration.model.enums.TriggerParam;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,18 +22,24 @@ public class ServicebusTopicTriggerGenerator extends AbstractTriggerGenerator {
 
     private final static String PLACEHOLDER_FUNCTION_NAME = "PLACEHOLDER_FUNCTION_NAME";
 
+    private final static String PLACEHOLDER_JAVA_FUNCTION_NAME = "PLACEHOLDER_JAVA_FUNCTION_NAME";
+
 
     @Override
     protected String generateTriggerCode(FunctionAppTrigger trigger) {
         String template = templateResolver.resolveTemplate(TRIGGER_SB_PUB_SUB);
 
-        String name = removeDashes(trigger.getTriggerName());
-        String topic = trigger.getTriggerParams().get(ResourceType.SERVICEBUS_TOPIC.getName());
-        String subscription = trigger.getTriggerParams().get(ResourceType.SERVICEBUS_SUBSCRIPTION.getName());
+        String name = trigger.getTriggerName();
+        String topic = trigger.getTriggerParams().get(TriggerParam.P_SERVICEBUS_TOPIC_NAME.getValue());
+        String subscription = trigger.getTriggerParams().get(TriggerParam.P_SERVICEBUS_SUBSCRIPTION_NAME.getValue());
 
-        return template.replace(PLACEHOLDER_FUNCTION_NAME, name)
-                .replace(PLACEHOLDER_TOPIC, topic)
+        String connectionStringAppSettingsKey = name + TriggerParam.AS_CONNECTIONSTRING.getValue();
+
+        return template
+                .replaceAll(PLACEHOLDER_FUNCTION_NAME, name)
+                .replace(PLACEHOLDER_JAVA_FUNCTION_NAME, name)
                 .replace(PLACEHOLDER_SUBSCRIPTION, subscription)
-                .replace(PLACEHOLDER_CONNECTION, "ServicebusConnection");
+                .replace(PLACEHOLDER_TOPIC, topic)
+                .replace(PLACEHOLDER_CONNECTION, connectionStringAppSettingsKey);
     }
 }

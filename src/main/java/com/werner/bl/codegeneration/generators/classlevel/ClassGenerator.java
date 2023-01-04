@@ -1,6 +1,7 @@
 package com.werner.bl.codegeneration.generators.classlevel;
 
 import com.werner.bl.codegeneration.generators.componentlevel.client.HttpGetClientGenerator;
+import com.werner.bl.codegeneration.generators.componentlevel.client.HttpPostClientGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.HttpGetTriggerGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusQueueTriggerGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusTopicTriggerGenerator;
@@ -36,9 +37,11 @@ public class ClassGenerator {
 
     private final HttpGetClientGenerator httpGetClientGenerator;
 
+    private final HttpPostClientGenerator httpPostClientGenerator;
+
     private final HttpGetTriggerGenerator httpGetTriggerGenerator;
 
-    public String generateClassCode(List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, Project project) {
+    public String generateClassCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
         String classTemplate = templateResolver.resolveTemplate(TemplateName.FUNCTION_APP_BASE_CLASS);
         String packageStatement = "package " + project.getGroupId() + "." + project.getArtifactId() + ";";
 
@@ -73,6 +76,7 @@ public class ClassGenerator {
             case HTTP_GET:
                 return httpGetClientGenerator.generateCodeString(client);
             case HTTP_POST:
+                return httpPostClientGenerator.generateCodeString(client);
         }
 
         throw new RuntimeException("Cannot create Client");

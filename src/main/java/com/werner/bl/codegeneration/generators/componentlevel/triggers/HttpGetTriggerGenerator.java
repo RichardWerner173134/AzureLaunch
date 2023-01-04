@@ -6,6 +6,7 @@ import com.werner.bl.codegeneration.model.FunctionAppTrigger;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 
 @Component
 @AllArgsConstructor
@@ -19,8 +20,10 @@ public class HttpGetTriggerGenerator extends AbstractTriggerGenerator {
     protected String generateTriggerCode(FunctionAppTrigger trigger) {
         String template = templateResolver.resolveTemplate(TemplateName.TRIGGER_HTTP_GET);
 
+        String name = trigger.getTriggerName();
+
         return template
-                .replace(PLACEHOLDER_FUNCTION_NAME, removeDashes(trigger.getTriggerName()))
-                .replace(PLACEHOLDER_JAVA_FUNCTION_NAME, removeDashes(trigger.getTriggerName()));
+                .replaceAll(PLACEHOLDER_FUNCTION_NAME, name)
+                .replace(PLACEHOLDER_JAVA_FUNCTION_NAME, name);
     }
 }

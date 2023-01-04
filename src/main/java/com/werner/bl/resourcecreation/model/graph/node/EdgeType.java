@@ -4,11 +4,22 @@ import lombok.Getter;
 
 @Getter
 public enum EdgeType {
-    HTTP_GET("http-get"),
-    HTTP_POST("http-post"),
-    SERVICE_BUS_PUB_SUB("sb-pub-sub"),
 
-    SERVICE_BUS_QUEUE("sb-queue")
+    // connection between two functionApps
+
+    HTTP_GET("http-get"),
+
+    HTTP_POST("http-post"),
+
+    // connection between a functionapp and a trigger/output binding
+    WRITE("write"),
+
+    READ("read"),
+
+    // TODO delete
+    SERVICE_BUS_PUB_SUB_READ("sb-pub-sub-read"),
+
+    SERVICE_BUS_QUEUE_READ("sb-queue-read")
     ;
 
     private String name;

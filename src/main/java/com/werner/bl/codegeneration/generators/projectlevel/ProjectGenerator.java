@@ -30,7 +30,7 @@ public class ProjectGenerator {
         powershellMavenAzFunCaller.generateProject(project);
 
         writeClassFile(project, functionApp.getTriggerList(), functionApp.getClientList());
-        writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList(), functionApp.getAdditionalProperties());
+        writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList());
 
         // TODO App Settings
         // TODO Mapping in ComponentLevelAnnotation
@@ -54,7 +54,7 @@ public class ProjectGenerator {
     }
 
     private void writeClassFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
-        String classCode = classGenerator.generateClassCode(triggers, clients, project);
+        String classCode = classGenerator.generateClassCode(project, triggers, clients);
 
         String classFilePath = project.getProjectRoot() + "\\src\\main\\java\\com\\werner\\" + project.getArtifactId() + "\\GeneratedClass.java";
         fileUtil.writeContentToFile(classFilePath, classCode);
@@ -64,8 +64,8 @@ public class ProjectGenerator {
         fileUtil.deleteFile(unnessecaryClassFilePath);
     }
 
-    private void writePomFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, Map<String, String> additionalProperties) {
-        String pomCode = pomGenerator.generateCode(project, triggers, clients, additionalProperties);
+    private void writePomFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
+        String pomCode = pomGenerator.generateCode(project, triggers, clients);
         String pomPath = project.getProjectRoot() + "\\pom.xml";
 
         fileUtil.writeContentToFile(pomPath, pomCode);

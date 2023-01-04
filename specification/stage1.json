@@ -1,34 +1,49 @@
 {
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
-		"resourceGroupName": "rg-testwerner001",
+		"resourceGroupName": "rg-testwerner002",
 		"resourceGroupLocation": "westus",
 		"appServicePlanName": "asp02938749011"
 	},
 	"graph": {
 		"nodes": [
 			{
-				"name": "subscription01",
+				"name": "subscription001",
 				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
-				"name": "funcapp00000001",
+				"name": "subscription002",
+				"type": "Microsoft.ServiceBus/namespaces/queues"
+			},
+			{
+				"name": "funcapp000000001",
 				"type": "Microsoft.Web/sites"
 			},
 			{
-				"name": "funcapp00000002",
+				"name": "funcapp000000002",
 				"type": "Microsoft.Web/sites"
 			}
 		],
 		"edges": [
 			{
-				"node1": "subscription01",
-				"node2": "funcapp00000001",
-				"type": "sb-pub-sub"
+				"node1": "subscription001",
+				"node2": "funcapp000000001",
+				"type": "read"
+
 			},
 			{
-				"node1": "funcapp00000001",
-				"node2": "funcapp00000002",
+				"node1": "subscription002",
+				"node2": "funcapp000000001",
+				"type": "read"
+			},
+			{
+				"node1": "funcapp000000001",
+				"node2": "funcapp000000002",
+				"type": "http-get"
+			},
+			{
+				"node1": "funcapp000000001",
+				"node2": "funcapp000000002",
 				"type": "http-get"
 			}
 		]
