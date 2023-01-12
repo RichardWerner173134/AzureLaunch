@@ -77,10 +77,10 @@ public class EdgeHelper {
 		Deployment d = getDeploymentCompositeForResource(nonFunctionResource,
 				resourceCreationPlan);
 
-		abc(nonFunctionResource, functionApp, d, edgeType);
+		addCodeConstructionUnitsToFunction(nonFunctionResource, functionApp, d, edgeType);
 	}
 
-	private void abc(BasicResourceNode basicResourceNode, FunctionApp functionApp,
+	private void addCodeConstructionUnitsToFunction(BasicResourceNode basicResourceNode, FunctionApp functionApp,
 			Deployment basicResourceDeployment, EdgeType edgeType) {
 
 		ResourceType resourceType = basicResourceNode.getResourceType();

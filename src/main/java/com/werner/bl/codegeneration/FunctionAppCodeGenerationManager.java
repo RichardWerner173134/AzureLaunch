@@ -10,9 +10,11 @@ import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.powershell.PowershellMavenAzFunCaller;
+import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +22,18 @@ import java.util.List;
 @AllArgsConstructor
 public class FunctionAppCodeGenerationManager {
 
-	private final EdgeTypeMapper edgeTypeMapper;
-
 	private final EdgeHelper edgeHelper;
 
 	private final ProjectGenerator projectGenerator;
 
-	private final PowershellMavenAzFunCaller powershellMavenAzFunCaller;
-
-	public void generateAndDeployFunctionApps(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan)
-			throws Exception {
+	public void generateAndDeployFunctionApps(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan,
+			AppConfig appConfig) throws Exception {
 		// run through directed graph and collect triggers and clients per function
 		List<FunctionApp> functionApps = computeFunctionAppConstruction2(resourceGraph, resourceCreationPlan);
 
 		// generate code and projects zipped
 		for (FunctionApp functionApp : functionApps) {
-			projectGenerator.generateProject(functionApp);
+			projectGenerator.generateProject(functionApp, appConfig);
 		}
 	}
 
@@ -55,8 +53,6 @@ public class FunctionAppCodeGenerationManager {
 
 	private void handleEdge(ResourceEdge edge, List<FunctionApp> functionApps,
 			ResourceCreationPlan resourceCreationPlan) {
-		AbstractResourceNode resource1 = edge.getResource1();
-		AbstractResourceNode resource2 = edge.getResource2();
 
 		if (isPairOfFunctions(edge)) {
 			edgeHelper.functionFunction(edge, functionApps, resourceCreationPlan);

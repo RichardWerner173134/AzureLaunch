@@ -32,9 +32,7 @@ public class PomGenerator {
 
 
     public String generateCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
-        String pomTemplate = templateResolver.resolveTemplate(TemplateName.POM_WITH_PLACEHOLDERS);
-
-        String result = pomTemplate;
+        String result = templateResolver.resolveTemplate(TemplateName.POM);
 
         result = result.replaceAll(PLACEHOLDER_FUNCTION_APP_NAME, project.getArtifactId())
                 .replace(PLACEHOLDER_APP_SERVICE_PLAN_NAME, FunctionApp.APP_SERVICE_PLAN_NAME)

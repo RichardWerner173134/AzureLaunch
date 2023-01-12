@@ -26,14 +26,21 @@ definitions:
     description: parsed file result
     type: object
     properties:
+      appConfig:
+        $ref: '#/definitions/appConfig'
       azAccount:
         $ref: '#/definitions/azAccount'
       graph:
         $ref: '#/definitions/graph'
+  appConfig:
+    type: object
+    properties:
+      deploymentMode:
+        type: string
   azAccount:
     type: object
     properties:
-      subscription: 
+      subscription:
         type: string
       resourceGroupName:
         type: string
@@ -46,12 +53,12 @@ definitions:
     properties:
       nodes:
         type: array
-        items: 
+        items:
           type: object
           properties:
             name:
               type: string
-            type: 
+            type:
               type: string
       edges:
         type: array
@@ -62,5 +69,5 @@ definitions:
               type: string
             node2:
               type: string
-            type: 
+            type:
               type: string

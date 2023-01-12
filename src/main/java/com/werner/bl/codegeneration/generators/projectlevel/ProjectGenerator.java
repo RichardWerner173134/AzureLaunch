@@ -6,6 +6,7 @@ import com.werner.bl.codegeneration.model.FunctionAppClient;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
 import com.werner.helper.FileUtil;
 import com.werner.powershell.PowershellMavenAzFunCaller;
+import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,9 @@ public class ProjectGenerator {
 
     private final PomGenerator pomGenerator;
 
-    public void generateProject(FunctionApp functionApp) throws Exception {
+    private final LocalSettingsGenerator localSettingsGenerator;
+
+    public void generateProject(FunctionApp functionApp, AppConfig appConfig) throws Exception {
         String resolvedTempDir = powershellMavenAzFunCaller.getTempDir();
 
         Project project = initProject(functionApp, resolvedTempDir);
@@ -32,9 +35,21 @@ public class ProjectGenerator {
 
         writeClassFile(project, functionApp.getTriggerList(), functionApp.getClientList());
         writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList());
+        writeLocalSettingsFile(project, functionApp.getTriggerList(), functionApp.getClientList());
 
         powershellMavenAzFunCaller.buildProject(project);
-        powershellMavenAzFunCaller.deployProject(project);
+
+        if(appConfig.equals("local") == false) {
+            powershellMavenAzFunCaller.deployProject(project);
+        }
+    }
+
+    private void writeLocalSettingsFile(Project project, List<FunctionAppTrigger> triggerList,
+            List<FunctionAppClient> clientList) {
+        String localSettingsCode = localSettingsGenerator.generateCode(triggerList, clientList);
+
+        String localSettingsPath = project.getProjectRoot() + "\\local.settings.json";
+        fileUtil.writeContentToFile(localSettingsPath, localSettingsCode);
     }
 
     private Project initProject(FunctionApp functionApp, String resolvedTempDir) {

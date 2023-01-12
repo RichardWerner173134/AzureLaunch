@@ -1,4 +1,7 @@
 {
+	"appConfig": {
+		"deploymentMode": "local"
+	},
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
 		"resourceGroupName": "rg-testwerner01",

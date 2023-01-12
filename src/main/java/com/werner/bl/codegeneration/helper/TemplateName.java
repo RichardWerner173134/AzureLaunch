@@ -7,7 +7,9 @@ public enum TemplateName {
 
     FUNCTION_APP_BASE_CLASS("FunctionAppBaseClass.java"),
 
-    POM_WITH_PLACEHOLDERS("PomTemplate.xml"),
+    POM("PomTemplate.xml"),
+
+    LOCAL_SETTINGS("LocalSettingsTemplate.json"),
 
     CLIENT_HTTP_GET("clients/HttpClientGet.java"),
 
