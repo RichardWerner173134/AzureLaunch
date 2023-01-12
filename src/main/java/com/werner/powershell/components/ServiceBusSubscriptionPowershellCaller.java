@@ -13,7 +13,7 @@ public class ServiceBusSubscriptionPowershellCaller extends AbstractPowershellRe
             + "$parameters.Add('serviceBusNamespaceName', '%s'); "
             + "$parameters.Add('serviceBusTopicName', '%s'); "
             + "$parameters.Add('serviceBusSubscriptionName', '%s'); "
-            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters; ";
+            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters";
 
     private final String SCRIPT_NAME = "serviceBusPubSub.json";
 

@@ -17,7 +17,7 @@ public class ServiceBusQueuePowershellCaller extends AbstractPowershellResourceC
     private final String SCRIPT = "$parameters = @{}; "
             + "$parameters.Add('serviceBusNamespaceName', '%s'); "
             + "$parameters.Add('serviceBusQueueName', '%s'); "
-            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters; ";
+            + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters";
 
 
     @Override

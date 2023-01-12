@@ -13,13 +13,12 @@ import com.werner.powershell.PowershellMavenAzFunCaller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
 public class FunctionAppCodeGenerationManager {
-
-	private static String RESOLVED_TEMP_DIR = null;
 
 	private final EdgeTypeMapper edgeTypeMapper;
 
@@ -33,13 +32,10 @@ public class FunctionAppCodeGenerationManager {
 			throws Exception {
 		// run through directed graph and collect triggers and clients per function
 		List<FunctionApp> functionApps = computeFunctionAppConstruction2(resourceGraph, resourceCreationPlan);
-		if (RESOLVED_TEMP_DIR == null) {
-			RESOLVED_TEMP_DIR = powershellMavenAzFunCaller.getTempDir();
-		}
 
 		// generate code and projects zipped
 		for (FunctionApp functionApp : functionApps) {
-			projectGenerator.generateProject(functionApp, RESOLVED_TEMP_DIR);
+			projectGenerator.generateProject(functionApp);
 		}
 	}
 

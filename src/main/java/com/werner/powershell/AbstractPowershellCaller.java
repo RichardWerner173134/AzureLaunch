@@ -1,34 +1,82 @@
 package com.werner.powershell;
 
-import com.profesorfalken.jpowershell.PowerShell;
-import com.profesorfalken.jpowershell.PowerShellResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 public abstract class AbstractPowershellCaller {
+	protected String resolvedTempDir;
 
-	@Autowired
-	@Qualifier("configMap")
-	protected Map<String, String> config;
-
-	protected void executePowershellCommand(String command) throws Exception {
-		PowerShell powerShell = PowerShell.openSession();
-		PowerShellResponse powerShellResponse = powerShell
-				.configuration(config)
-				.executeCommand(command);
-		powerShell.close();
-
-		handleResponse(powerShellResponse);
+	public String getTempDir() {
+		if(resolvedTempDir == null) {
+			executeSingleCommand(String.format("if(-Not (Test-Path -Path %s)) {mkdir %s}",
+					"$home\\temp", "$home\\temp"));
+			resolvedTempDir = executeSingleCommandWithResponse("Write-Host $home\\temp");
+		}
+		return resolvedTempDir;
 	}
 
-	protected PowerShellResponse executePowershellWithResponse(String command) {
-		PowerShell powershell = PowerShell.openSession();
-		PowerShellResponse powerShellResponse = powershell.configuration(config).executeCommand(command);
-		powershell.close();
-		return powerShellResponse;
+	protected void executeSingleCommand(String command) {
+
+		ProcessBuilder  pb = new ProcessBuilder("powershell.exe", "-Command", command);
+
+		try {
+			Process process = pb.start();
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			// wait to complete underlying command execution
+			int exitCode = process.waitFor();
+			System.out.println("\nTerminated with error code : " + exitCode);
+
+		} catch (IOException | InterruptedException ex) {
+			ex.printStackTrace();
+		}
 	}
 
-	public abstract void handleResponse(PowerShellResponse powerShellResponse) throws Exception;
+	protected void executeCommandChain(List<String> commands) {
+		for (String cmd : commands) {
+			executeSingleCommand(cmd);
+		}
+	}
+
+	protected String executeSingleCommandWithResponse(String command) {
+		ProcessBuilder pb = new ProcessBuilder("powershell.exe", "-Command", command);
+
+		String result = "";
+
+		try {
+			Process process = pb.start();
+
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+				System.out.println(s);
+				result += s;
+			}
+
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

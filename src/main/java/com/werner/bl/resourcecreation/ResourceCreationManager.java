@@ -101,8 +101,6 @@ public class ResourceCreationManager {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.writeDeploymentScript(deployment);
 		}
-
-		deploymentHandler.executeDeploymentScript();
 	}
 
 	private void addParentResources(AbstractResourceNode node, Deployment deployment){

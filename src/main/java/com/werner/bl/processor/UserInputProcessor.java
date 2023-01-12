@@ -8,20 +8,13 @@ import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.validation.UserInputValidator;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.util.Map;
 
 @AllArgsConstructor
 @Component
 public class UserInputProcessor {
-
-	@Autowired
-	@Qualifier("configMap")
-	protected Map<String, String> config;
 
 	private final ResourceCreationManager resourceCreationManager;
 
@@ -40,7 +33,7 @@ public class UserInputProcessor {
 
 		// create all non Functionapp related things
 		ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
-		//resourceCreationManager.createAzResources(resourceCreationPlan);
+		resourceCreationManager.createAzResources(resourceCreationPlan);
 
 		// create all Functionapp related things
 		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph, resourceCreationPlan);

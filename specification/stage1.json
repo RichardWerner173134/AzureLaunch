@@ -1,49 +1,49 @@
 {
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
-		"resourceGroupName": "rg-testwerner002",
+		"resourceGroupName": "rg-testwerner01",
 		"resourceGroupLocation": "westus",
-		"appServicePlanName": "asp02938749011"
+		"appServicePlanName": "asp098237491"
 	},
 	"graph": {
 		"nodes": [
 			{
-				"name": "subscription001",
+				"name": "sub01",
 				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
-				"name": "subscription002",
+				"name": "queue01",
 				"type": "Microsoft.ServiceBus/namespaces/queues"
 			},
 			{
-				"name": "funcapp000000001",
+				"name": "funcapp01",
 				"type": "Microsoft.Web/sites"
 			},
 			{
-				"name": "funcapp000000002",
+				"name": "funcapp02",
 				"type": "Microsoft.Web/sites"
 			}
 		],
 		"edges": [
 			{
-				"node1": "subscription001",
-				"node2": "funcapp000000001",
+				"node1": "sub01",
+				"node2": "funcapp01",
 				"type": "read"
 
 			},
 			{
-				"node1": "subscription002",
-				"node2": "funcapp000000001",
+				"node1": "queue01",
+				"node2": "funcapp01",
 				"type": "read"
 			},
 			{
-				"node1": "funcapp000000001",
-				"node2": "funcapp000000002",
+				"node1": "funcapp01",
+				"node2": "funcapp02",
 				"type": "http-get"
 			},
 			{
-				"node1": "funcapp000000001",
-				"node2": "funcapp000000002",
+				"node1": "funcapp01",
+				"node2": "funcapp02",
 				"type": "http-get"
 			}
 		]
