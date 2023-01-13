@@ -1,6 +1,6 @@
 {
 	"appConfig": {
-		"deploymentMode": "local"
+		"localDeploymentOnly": true
 	},
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",

@@ -15,17 +15,19 @@ import com.werner.bl.resourcecreation.model.graph.node.BasicResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.CodegenResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.EdgeType;
 import com.werner.powershell.ServiceBusResolver;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EdgeHelper {
 
 	private final ServiceBusResolver serviceBusResolver;
+
+	private int nextPortNumber = 8080;
 
 	public void functionFunction(ResourceEdge edge, List<FunctionApp> functionApps,
 			ResourceCreationPlan resourceCreationPlan) {
@@ -149,7 +151,10 @@ public class EdgeHelper {
 			return first.get();
 		} else {
 			FunctionApp functionApp = new FunctionApp(functionAppName);
+			functionApp.setLocalPortNumber(nextPortNumber);
 			functionApps.add(functionApp);
+			nextPortNumber++;
+
 			return functionApp;
 		}
 	}

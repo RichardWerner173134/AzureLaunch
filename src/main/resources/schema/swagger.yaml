@@ -35,8 +35,8 @@ definitions:
   appConfig:
     type: object
     properties:
-      deploymentMode:
-        type: string
+      localDeploymentOnly:
+        type: boolean
   azAccount:
     type: object
     properties:

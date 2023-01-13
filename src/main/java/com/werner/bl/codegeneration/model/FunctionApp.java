@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FunctionApp {
 
@@ -27,7 +25,9 @@ public class FunctionApp {
 
     private int nextTriggerNumber = 1;
 
-    private int nextConnectionStringNumber = 1;
+    @Getter
+    @Setter
+    private int localPortNumber;
 
     public FunctionApp(String functionAppName) {
         this.functionAppName = functionAppName;

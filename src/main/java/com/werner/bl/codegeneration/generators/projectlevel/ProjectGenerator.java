@@ -33,13 +33,13 @@ public class ProjectGenerator {
 
         powershellMavenAzFunCaller.generateProject(project, resolvedTempDir);
 
-        writeClassFile(project, functionApp.getTriggerList(), functionApp.getClientList());
+        writeClassFile(project, functionApp.getTriggerList(), functionApp.getClientList(), appConfig);
         writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList());
         writeLocalSettingsFile(project, functionApp.getTriggerList(), functionApp.getClientList());
 
         powershellMavenAzFunCaller.buildProject(project);
 
-        if(appConfig.equals("local") == false) {
+        if(appConfig.isLocalDeploymentOnly() == false) {
             powershellMavenAzFunCaller.deployProject(project);
         }
     }
@@ -66,8 +66,8 @@ public class ProjectGenerator {
         return result;
     }
 
-    private void writeClassFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
-        String classCode = classGenerator.generateClassCode(project, triggers, clients);
+    private void writeClassFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, AppConfig appConfig) {
+        String classCode = classGenerator.generateClassCode(project, triggers, clients, appConfig);
 
         String classFilePath = project.getProjectRoot() + "\\src\\main\\java\\com\\werner\\" + project.getArtifactId() + "\\GeneratedClass.java";
         fileUtil.writeContentToFile(classFilePath, classCode);

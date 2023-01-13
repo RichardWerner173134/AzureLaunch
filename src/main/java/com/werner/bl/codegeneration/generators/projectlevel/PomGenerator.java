@@ -55,19 +55,20 @@ public class PomGenerator {
                 }
             }
         }
-
-        for (FunctionAppClient client : clients) {
-            for (Map.Entry<String, String> entry : client.getClientParams().entrySet()) {
-                String k = entry.getKey();
-                String v = entry.getValue();
-                if(k.startsWith(client.getClientName())) {
-                    String appSetting = property.replace(PLACEHOLDER_APPSETTINGS_KEY, k)
-                            .replace(PLACEHOLDER_APPSETTINGS_VALUE, v);
-                    result = result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES,
-                            appSetting + "\n" + PLACEHOLDER_ADDITIONAL_PROPERTIES);
-                }
-            }
-        }
+//
+//        TODO dont hardcode clienturl in code, use localsettings/appsettings
+//        for (FunctionAppClient client : clients) {
+//            for (Map.Entry<String, String> entry : client.getClientParams().entrySet()) {
+//                String k = entry.getKey();
+//                String v = entry.getValue();
+//                if(k.startsWith(client.getClientName())) {
+//                    String appSetting = property.replace(PLACEHOLDER_APPSETTINGS_KEY, k)
+//                            .replace(PLACEHOLDER_APPSETTINGS_VALUE, v);
+//                            result = result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES,
+//                            appSetting + "\n" + PLACEHOLDER_ADDITIONAL_PROPERTIES);
+//                }
+//            }
+//        }
 
         return result.replace(PLACEHOLDER_ADDITIONAL_PROPERTIES, "");
     }

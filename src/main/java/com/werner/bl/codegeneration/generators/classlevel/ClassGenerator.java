@@ -12,6 +12,7 @@ import com.werner.bl.codegeneration.model.FunctionAppClient;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
 import com.werner.bl.codegeneration.model.enums.FunctionAppClientType;
 import com.werner.bl.codegeneration.model.enums.FunctionAppTriggerType;
+import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class ClassGenerator {
 
     private final HttpGetTriggerGenerator httpGetTriggerGenerator;
 
-    public String generateClassCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
+    public String generateClassCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, AppConfig appConfig) {
         String classTemplate = templateResolver.resolveTemplate(TemplateName.FUNCTION_APP_BASE_CLASS);
         String packageStatement = "package " + project.getGroupId() + "." + project.getArtifactId() + ";";
 
@@ -55,7 +56,7 @@ public class ClassGenerator {
         }
 
         for (FunctionAppClient client : clients) {
-            String code = getClientCode(client);
+            String code = getClientCode(client, appConfig);
             result = result.replace(PLACEHOLDER_CODE, code + PLACEHOLDER_CODE);
             imports.addAll(client.getClientType().getNecessaryImports());
         }
@@ -70,7 +71,7 @@ public class ClassGenerator {
                 .replace(PLACEHOLDER_CODE, "");
     }
 
-    private String getClientCode(FunctionAppClient client) {
+    private String getClientCode(FunctionAppClient client, AppConfig appConfig) {
         FunctionAppClientType clientType = client.getClientType();
         switch(clientType) {
             case HTTP_GET:

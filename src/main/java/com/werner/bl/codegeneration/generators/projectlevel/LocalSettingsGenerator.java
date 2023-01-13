@@ -33,18 +33,20 @@ public class LocalSettingsGenerator {
 				}
 			}
 		}
+//      TODO dont hardcode clienturl in code, use localsettings/appsettings
+//		for (FunctionAppClient client : clients) {
+//			for (Map.Entry<String, String> entry : client.getClientParams().entrySet()) {
+//				String k = entry.getKey();
+//				String v = entry.getValue();
+//				if (k.startsWith(client.getClientName())) {
+//					String connectionString = String.format(property, k, v);
+//					result = result.replace(PLACEHOLDER_CONNECTIONSTRINGS, connectionString + PLACEHOLDER_CONNECTIONSTRINGS);
+//				}
+//			}
+//		}
 
-		for (FunctionAppClient client : clients) {
-			for (Map.Entry<String, String> entry : client.getClientParams().entrySet()) {
-				String k = entry.getKey();
-				String v = entry.getValue();
-				if (k.startsWith(client.getClientName())) {
-					String connectionString = String.format(property, k, v);
-					result = result.replace(PLACEHOLDER_CONNECTIONSTRINGS, connectionString + PLACEHOLDER_CONNECTIONSTRINGS);
-				}
-			}
-		}
-
-		return result.replace(",\n" + PLACEHOLDER_CONNECTIONSTRINGS, "");
+		return result
+				.replace(",\n", "")
+				.replace(PLACEHOLDER_CONNECTIONSTRINGS, "");
 	}
 }

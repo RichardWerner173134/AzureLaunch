@@ -33,7 +33,7 @@ public class UserInputProcessor {
 
 		// create all non Functionapp related things
 		ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
-		// resourceCreationManager.createAzResources(resourceCreationPlan);
+		resourceCreationManager.createAzResources(resourceCreationPlan);
 
 		// create all Functionapp related things
 		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph, resourceCreationPlan, parseFileRequest.getAppConfig());
