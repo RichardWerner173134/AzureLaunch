@@ -20,7 +20,7 @@
 
         try {
             Response response = call.execute();
-            return request.createResponseBuilder(HttpStatus.OK).body(response.body().string()).build();
+            return request.createResponseBuilder(HttpStatus.OK).body("Response from called endpoint: " + response.body().string()).build();
         } catch (IOException e) {
             return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

@@ -8,6 +8,8 @@ import com.werner.helper.FileUtil;
 import com.werner.powershell.PowershellMavenAzFunCaller;
 import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class ProjectGenerator {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ProjectGenerator.class);
 
     private final FileUtil fileUtil;
 
@@ -26,7 +30,8 @@ public class ProjectGenerator {
 
     private final LocalSettingsGenerator localSettingsGenerator;
 
-    public void generateProject(FunctionApp functionApp, AppConfig appConfig) throws Exception {
+
+    public Project generateProject(FunctionApp functionApp, AppConfig appConfig) {
         String resolvedTempDir = powershellMavenAzFunCaller.getTempDir();
 
         Project project = initProject(functionApp, resolvedTempDir);
@@ -42,6 +47,8 @@ public class ProjectGenerator {
         if(appConfig.isLocalDeploymentOnly() == false) {
             powershellMavenAzFunCaller.deployProject(project);
         }
+
+        return project;
     }
 
     private void writeLocalSettingsFile(Project project, List<FunctionAppTrigger> triggerList,

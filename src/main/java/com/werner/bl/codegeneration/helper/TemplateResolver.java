@@ -12,21 +12,21 @@ public class TemplateResolver {
 
     public String resolveTemplate(TemplateName templateName) {
         String filepath = templateName.getFilepath();
+        return readSampleFile(new File(filepath));
+    }
 
+    private String readSampleFile(File file) {
         try {
-            return readSampleFile(new File(filepath));
+            String content = "";
+            BufferedReader bufferedReader = null;
+            bufferedReader = new BufferedReader(new FileReader(file));
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                content += line + "\n";
+            }
+            return content;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String readSampleFile(File file) throws IOException {
-        String content = "";
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        String line = "";
-        while((line = bufferedReader.readLine()) != null) {
-            content += line + "\n";
-        }
-        return content;
     }
 }

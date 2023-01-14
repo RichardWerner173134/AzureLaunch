@@ -97,9 +97,9 @@ public class ResourceCreationManager {
 		return resourceCreationPlan;
 	}
 
-	public void createAzResources(ResourceCreationPlan resourceCreationPlan) throws Exception {
+	public void createAzResources(ResourceCreationPlan resourceCreationPlan) {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
-			deploymentHandler.writeDeploymentScript(deployment);
+			deploymentHandler.deploy(deployment);
 		}
 	}
 

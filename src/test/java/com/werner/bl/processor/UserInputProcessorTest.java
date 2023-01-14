@@ -2,11 +2,11 @@ package com.werner.bl.processor;
 
 
 import com.werner.bl.codegeneration.FunctionAppCodeGenerationManager;
-import com.werner.bl.input.UserInputReader;
 import com.werner.bl.resourcecreation.ResourceCreationManager;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
-import com.werner.validation.UserInputValidator;
+import com.werner.input.UserInputReader;
+import com.werner.input.UserInputValidator;
 import generated.internal.v1_0_0.model.AppConfig;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import org.junit.Test;
@@ -16,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.File;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserInputProcessorTest {
@@ -57,7 +55,7 @@ public class UserInputProcessorTest {
 
         // mock the readUserInput, validateUserInput, computeResourceGraph, computeResourceCreationPlan, generateAndDeployFunctionApps methods
         Mockito.when(parseFileRequest.getAppConfig()).thenReturn(appConfig);
-        Mockito.when(userInputReader.readUserInput(Mockito.any(File.class))).thenReturn(parseFileRequest);
+        Mockito.when(userInputReader.readUserInput(Mockito.anyString())).thenReturn(parseFileRequest);
         Mockito.doNothing().when(userInputValidator).validateUserInput(Mockito.any(AzCodegenRequest.class));
         Mockito.when(resourceCreationManager.computeResourceGraph(Mockito.any(AzCodegenRequest.class))).thenReturn(resourceGraph);
         Mockito.when(resourceCreationManager.computeResourceCreationPlan(Mockito.any(ResourceGraph.class))).thenReturn(resourceCreationPlan);
@@ -65,7 +63,7 @@ public class UserInputProcessorTest {
 
         userInputProcessor.process(filePath);
         // verify the calls to readUserInput, validateUserInput, computeResourceGraph, computeResourceCreationPlan, generateAndDeployFunctionApps methods
-        Mockito.verify(userInputReader, Mockito.times(1)).readUserInput(ArgumentMatchers.any(File.class));
+        Mockito.verify(userInputReader, Mockito.times(1)).readUserInput(ArgumentMatchers.anyString());
         Mockito.verify(userInputValidator, Mockito.times(1)).validateUserInput(ArgumentMatchers.any(AzCodegenRequest.class));
         Mockito.verify(resourceCreationManager, Mockito.times(1)).computeResourceGraph(ArgumentMatchers.any(AzCodegenRequest.class));
         Mockito.verify(resourceCreationManager, Mockito.times(1)).createAzResources(ArgumentMatchers.any(ResourceCreationPlan.class));

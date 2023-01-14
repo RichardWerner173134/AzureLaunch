@@ -7,9 +7,6 @@ import com.werner.powershell.components.ServiceBusQueuePowershellCaller;
 import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 
 @Component
 public class DeploymentHandler {
@@ -22,8 +19,6 @@ public class DeploymentHandler {
 
 	private ServiceBusSubscriptionPowershellCaller serviceBusSubscriptionPowershellCaller;
 
-	private Set<String> commands = new LinkedHashSet<>();
-
 	public DeploymentHandler(ServiceBusQueuePowershellCaller serviceBusQueuePowershellCaller, ResourceGroupPowershellCaller rgPSCaller,
 							 ServiceBusSubscriptionPowershellCaller serviceBusSubscriptionPowershellCaller) {
 		this.serviceBusQueuePowershellCaller = serviceBusQueuePowershellCaller;
@@ -31,7 +26,7 @@ public class DeploymentHandler {
 		this.serviceBusSubscriptionPowershellCaller = serviceBusSubscriptionPowershellCaller;
 	}
 
-	public void writeDeploymentScript(Deployment deployment) throws Exception {
+	public void deploy(Deployment deployment) {
 
 		AbstractResourceNode firstResource = deployment.getDeploymentComposite().get(0);
 

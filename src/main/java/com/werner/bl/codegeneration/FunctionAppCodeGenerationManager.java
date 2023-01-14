@@ -1,20 +1,20 @@
 package com.werner.bl.codegeneration;
 
+import com.werner.bl.codegeneration.generators.projectlevel.Project;
 import com.werner.bl.codegeneration.generators.projectlevel.ProjectGenerator;
 import com.werner.bl.codegeneration.helper.EdgeHelper;
-import com.werner.bl.codegeneration.helper.EdgeTypeMapper;
 import com.werner.bl.codegeneration.model.FunctionApp;
+import com.werner.bl.localexecution.LocalFunctionExecutor;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
-import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
-import com.werner.powershell.PowershellMavenAzFunCaller;
 import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,40 +22,58 @@ import java.util.List;
 @AllArgsConstructor
 public class FunctionAppCodeGenerationManager {
 
+	private final static Logger LOG = LoggerFactory.getLogger(FunctionAppCodeGenerationManager.class);
+
 	private final EdgeHelper edgeHelper;
 
 	private final ProjectGenerator projectGenerator;
 
+	private final LocalFunctionExecutor localFunctionExecutor;
+
 	public void generateAndDeployFunctionApps(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan,
-			AppConfig appConfig) throws Exception {
+			AppConfig appConfig) {
 		// run through directed graph and collect triggers and clients per function
-		List<FunctionApp> functionApps = computeFunctionAppConstruction2(resourceGraph, resourceCreationPlan);
+		List<FunctionApp> functionApps = computeFunctionAppConstruction(resourceGraph, resourceCreationPlan, appConfig);
+
+		List<String> logMessages = new ArrayList<>();
+		logMessages.add("Copy following commands to start functions locally:");
 
 		// generate code and projects zipped
 		for (FunctionApp functionApp : functionApps) {
-			projectGenerator.generateProject(functionApp, appConfig);
+			Project project = projectGenerator.generateProject(functionApp, appConfig);
+
+			if(appConfig.isLocalDeploymentOnly()) {
+				int localPortNumber = functionApp.getLocalPortNumber();
+				String targetFolderPath = project.getProjectRoot() + "\\target\\azure-functions\\" + functionApp.getFunctionAppName();
+				localFunctionExecutor.startFunction(targetFolderPath, localPortNumber);
+				logMessages.add("\n\n" + functionApp.getFunctionAppName() + ":\ncd " + targetFolderPath + "\nfunc start --port " + localPortNumber);
+			}
+		}
+
+		for (String m : logMessages) {
+			LOG.info(m);
 		}
 	}
 
-	private List<FunctionApp> computeFunctionAppConstruction2(ResourceGraph resourceGraph,
-			ResourceCreationPlan resourceCreationPlan) {
+	private List<FunctionApp> computeFunctionAppConstruction(ResourceGraph resourceGraph,
+															 ResourceCreationPlan resourceCreationPlan, AppConfig appConfig) {
 		FunctionApp.APP_SERVICE_PLAN_NAME = resourceGraph.getAppServicePlanName();
 		FunctionApp.RESOURCE_GROUP_NAME = resourceGraph.getResourceGroup().getName();
 
 		ArrayList<FunctionApp> functionApps = new ArrayList<>();
 
 		for (ResourceEdge edge : resourceGraph.getEdges()) {
-			handleEdge(edge, functionApps, resourceCreationPlan);
+			handleEdge(edge, functionApps, resourceCreationPlan, appConfig);
 		}
 
 		return functionApps;
 	}
 
 	private void handleEdge(ResourceEdge edge, List<FunctionApp> functionApps,
-			ResourceCreationPlan resourceCreationPlan) {
+			ResourceCreationPlan resourceCreationPlan, AppConfig appConfig) {
 
 		if (isPairOfFunctions(edge)) {
-			edgeHelper.functionFunction(edge, functionApps, resourceCreationPlan);
+			edgeHelper.functionFunction(edge, functionApps, appConfig);
 		} else if (isFunctionAndMessagingResource(edge)) {
 			edgeHelper.functionNoFunction(edge, functionApps, resourceCreationPlan);
 		} else {

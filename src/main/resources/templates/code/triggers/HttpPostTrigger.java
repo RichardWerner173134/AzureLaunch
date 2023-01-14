@@ -11,12 +11,9 @@
                     .body("No body provided")
                     .build();
         }
-        // return JSON from to the client
-        // Generate document
-        final String body = request.getBody().get();
-        final String jsonDocument = "{\"id\":\"123456\", " + "\"description\": \"" + body + "\"}";
+
         return request.createResponseBuilder(HttpStatus.OK)
                         .header("Content-Type", "application/json")
-                        .body(jsonDocument)
+                        .body("Message posted successfully")
                         .build();
     }

@@ -32,8 +32,29 @@ public enum FunctionAppClientType {
                             "        </dependency>"
             )),
     HTTP_POST("http-post",
-            List.of(),
-            List.of());
+            List.of("import com.microsoft.azure.functions.ExecutionContext;",
+                    "import com.microsoft.azure.functions.HttpMethod;",
+                    "import com.microsoft.azure.functions.HttpRequestMessage;",
+                    "import com.microsoft.azure.functions.HttpResponseMessage;",
+                    "import com.microsoft.azure.functions.HttpStatus;",
+                    "import com.microsoft.azure.functions.annotation.AuthorizationLevel;",
+                    "import com.microsoft.azure.functions.annotation.FunctionName;",
+                    "import com.microsoft.azure.functions.annotation.HttpTrigger;",
+                    "import com.squareup.okhttp.Call;",
+                    "import com.squareup.okhttp.MediaType;",
+                    "import com.squareup.okhttp.OkHttpClient;",
+                    "import com.squareup.okhttp.Request;",
+                    "import com.squareup.okhttp.RequestBody;",
+                    "import com.squareup.okhttp.Response;",
+                    "import java.io.IOException;",
+                    "import java.util.Optional;"),
+            List.of(
+                    "<!-- https://mvnrepository.com/artifact/com.squareup.okhttp/okhttp -->\n" +
+                            "        <dependency>\n" +
+                            "            <groupId>com.squareup.okhttp</groupId>\n" +
+                            "            <artifactId>okhttp</artifactId>\n" +
+                            "            <version>2.7.5</version>\n" +
+                            "        </dependency>"));
 
     private String name;
 
@@ -49,7 +70,7 @@ public enum FunctionAppClientType {
 
     public static FunctionAppClientType findById(String id) {
         for (FunctionAppClientType value : values()) {
-            if(id.equals(value.getName())) {
+            if (id.equals(value.getName())) {
                 return value;
             }
         }

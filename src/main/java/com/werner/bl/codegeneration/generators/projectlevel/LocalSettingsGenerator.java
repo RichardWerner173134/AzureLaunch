@@ -46,7 +46,7 @@ public class LocalSettingsGenerator {
 //		}
 
 		return result
-				.replace(",\n", "")
+				.replace(",\n" + PLACEHOLDER_CONNECTIONSTRINGS, "")
 				.replace(PLACEHOLDER_CONNECTIONSTRINGS, "");
 	}
 }

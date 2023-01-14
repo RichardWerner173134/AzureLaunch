@@ -3,6 +3,7 @@ package com.werner.bl.codegeneration.generators.classlevel;
 import com.werner.bl.codegeneration.generators.componentlevel.client.HttpGetClientGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.client.HttpPostClientGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.HttpGetTriggerGenerator;
+import com.werner.bl.codegeneration.generators.componentlevel.triggers.HttpPostTriggerGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusQueueTriggerGenerator;
 import com.werner.bl.codegeneration.generators.componentlevel.triggers.ServicebusTopicTriggerGenerator;
 import com.werner.bl.codegeneration.generators.projectlevel.Project;
@@ -41,6 +42,8 @@ public class ClassGenerator {
     private final HttpPostClientGenerator httpPostClientGenerator;
 
     private final HttpGetTriggerGenerator httpGetTriggerGenerator;
+
+    private final HttpPostTriggerGenerator httpPostTriggerGenerator;
 
     public String generateClassCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, AppConfig appConfig) {
         String classTemplate = templateResolver.resolveTemplate(TemplateName.FUNCTION_APP_BASE_CLASS);
@@ -89,6 +92,7 @@ public class ClassGenerator {
             case HTTP_GET:
                 return httpGetTriggerGenerator.generateCodeString(trigger);
             case HTTP_POST:
+                return httpPostTriggerGenerator.generateCodeString(trigger);
             case SERVICE_BUS_PUB_SUB:
                 return servicebusTopicTriggerGenerator.generateCodeString(trigger);
             case SERVICE_BUS_QUEUE:

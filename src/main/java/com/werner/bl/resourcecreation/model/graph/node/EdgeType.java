@@ -24,7 +24,7 @@ public enum EdgeType {
 
     private String name;
 
-    private EdgeType(String name) {
+    EdgeType(String name) {
         this.name = name;
     }
 

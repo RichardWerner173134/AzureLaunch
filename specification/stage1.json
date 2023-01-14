@@ -1,6 +1,6 @@
 {
 	"appConfig": {
-		"localDeploymentOnly": true
+		"localDeploymentOnly": false
 	},
 	"azAccount": {
 		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
@@ -19,35 +19,35 @@
 				"type": "Microsoft.ServiceBus/namespaces/queues"
 			},
 			{
-				"name": "funcapp01",
+				"name": "funcapp0001",
 				"type": "Microsoft.Web/sites"
 			},
 			{
-				"name": "funcapp02",
+				"name": "funcapp0002",
 				"type": "Microsoft.Web/sites"
 			}
 		],
 		"edges": [
 			{
 				"node1": "sub01",
-				"node2": "funcapp01",
+				"node2": "funcapp0001",
 				"type": "read"
 
 			},
 			{
 				"node1": "queue01",
-				"node2": "funcapp01",
+				"node2": "funcapp0001",
 				"type": "read"
 			},
 			{
-				"node1": "funcapp01",
-				"node2": "funcapp02",
+				"node1": "funcapp0001",
+				"node2": "funcapp0002",
 				"type": "http-get"
 			},
 			{
-				"node1": "funcapp01",
-				"node2": "funcapp02",
-				"type": "http-get"
+				"node1": "funcapp0001",
+				"node2": "funcapp0002",
+				"type": "http-post"
 			}
 		]
 	}

@@ -14,7 +14,7 @@ public abstract class AbstractPowershellResourceCreationCaller extends AbstractP
 
     protected abstract String getScript(ResourceGroup rgNode);
 
-    public void createResourceGroup(ResourceGroup rg) throws Exception {
+    public void createResourceGroup(ResourceGroup rg) {
         String command = getScript(rg);
         executeSingleCommand(command);
     }

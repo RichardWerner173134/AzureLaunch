@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServiceBusResolver extends AbstractPowershellCaller {
 
-    public String resolveServiceBusConnection(String rg, String sbns) {
+    public String resolveServiceBusConnectionString(String rg, String sbns) {
         StringBuilder sb = new StringBuilder();
         sb.append("(Get-AzServiceBusKey ");
         sb.append("-Name RootManageSharedAccessKey ");
