@@ -3,10 +3,15 @@
 		"localDeploymentOnly": false
 	},
 	"azAccount": {
-		"subscription": "lkuquwzhelökzqwlkejhqwlkejhwqlkjh",
 		"resourceGroupName": "rg-testwerner01",
 		"resourceGroupLocation": "westus",
-		"appServicePlanName": "asp098237491"
+		"appServicePlanName": "asp098237491",
+		"servicePrincipal": {
+			"servicePrincipalName": "testServicePrincipal",
+			"servicePrincipalAppId": "6a9ddee6-163a-40fa-b66f-09263089fa71",
+			"servicePrincipalSecret": "4uK8Q~2nNT2mshSzB1XCwUWpUBxnYX.5QMNRBaRP",
+			"servicePrincipalTenant": "7dbee4a3-d935-4716-b330-afffbbbe96a7"
+		}
 	},
 	"graph": {
 		"nodes": [

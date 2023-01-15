@@ -35,10 +35,6 @@ public class DeploymentHandler {
 				rgPSCaller.createResourceGroup((ResourceGroup) firstResource);
 				cachedRgNameForCurrentDeployments = firstResource.getName();
 				break;
-			case KEYVAULT:
-				break;
-			case KEYVAULT_SECRET:
-				break;
 			case SERVICEBUS_NAMESPACE:
 			case SERVICEBUS_TOPIC:
 			case SERVICEBUS_SUBSCRIPTION:
@@ -46,12 +42,6 @@ public class DeploymentHandler {
 				break;
 			case SERVICEBUS_QUEUE:
 				serviceBusQueuePowershellCaller.createResourceInResourceGroup(deployment.getDeploymentComposite(), cachedRgNameForCurrentDeployments);
-				break;
-			case VNET:
-				break;
-			case STORAGE_ACCOUNT:
-				break;
-			case APP_SERVICE_ENVIRONMENT:
 				break;
 		}
 	}

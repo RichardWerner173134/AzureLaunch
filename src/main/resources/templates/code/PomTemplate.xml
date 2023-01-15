@@ -87,9 +87,9 @@
                         PLACEHOLDER_ADDITIONAL_PROPERTIES
                     </appSettings>
                     <auth>
-                        <client>480d18fe-721d-45aa-8215-1fafab7f06e0</client>
-                        <tenant>7dbee4a3-d935-4716-b330-afffbbbe96a7</tenant>
-                        <key>sCn8Q~65O2kfBh-quq1gWzIvLC3gE26VdmJ0JcqI</key>
+                        <client>PLACEHOLDER_SERVICE_PRINCIPAL_CLIENT</client>
+                        <tenant>PLACEHOLDER_SERVICE_PRINCIPAL_TENANT</tenant>
+                        <key>PLACEHOLDER_SERVICE_PRINCIPAL_SECRET</key>
                         <environment>azure</environment>
                     </auth>
                 </configuration>

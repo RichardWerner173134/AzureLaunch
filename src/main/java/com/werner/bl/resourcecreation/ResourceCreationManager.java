@@ -8,10 +8,7 @@ import com.werner.bl.resourcecreation.model.deployment.Deployment;
 import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
-import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
-import com.werner.bl.resourcecreation.model.graph.node.EdgeType;
-import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
-import com.werner.bl.resourcecreation.model.graph.node.ResourceNodeFactory;
+import com.werner.bl.resourcecreation.model.graph.node.*;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
 import generated.internal.v1_0_0.model.GraphNodes;
@@ -31,12 +28,20 @@ public class ResourceCreationManager {
 	private final DeploymentHandler deploymentHandler;
 
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
+		// resourceGroup
 		ResourceGroup resourceGroup = new ResourceGroup(
 				request.getAzAccount().getResourceGroupName(),
-				ResourceType.RESOURCE_GROUP,
 				request.getAzAccount().getResourceGroupLocation());
 
+		// one appServicePlan for all functions
 		String appServicePlanName = request.getAzAccount().getAppServicePlanName();
+
+		// ServicePrincipal
+		String servicePrincipalName = request.getAzAccount().getServicePrincipal().getServicePrincipalName();
+		String servicePrincipalAppId = request.getAzAccount().getServicePrincipal().getServicePrincipalAppId();
+		String tenant = request.getAzAccount().getServicePrincipal().getServicePrincipalTenant();
+		String secret = request.getAzAccount().getServicePrincipal().getServicePrincipalSecret();
+		ServicePrincipal servicePrincipal = new ServicePrincipal(servicePrincipalName, servicePrincipalAppId, tenant, secret);
 
 		List<AbstractResourceNode> nodes = new ArrayList<>();
 		List<ResourceEdge> edges = new ArrayList<>();
@@ -67,7 +72,7 @@ public class ResourceCreationManager {
 
 			edges.add(new ResourceEdge(node1, node2, edgeType));
 		}
-		return new ResourceGraph(resourceGroup, appServicePlanName, nodes, edges);
+		return new ResourceGraph(resourceGroup, appServicePlanName, servicePrincipal, nodes, edges);
 	}
 
 	public ResourceCreationPlan computeResourceCreationPlan(ResourceGraph resourceGraph) {

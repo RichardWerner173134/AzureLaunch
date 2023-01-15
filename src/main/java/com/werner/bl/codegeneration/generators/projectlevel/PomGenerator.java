@@ -5,6 +5,7 @@ import com.werner.bl.codegeneration.helper.TemplateResolver;
 import com.werner.bl.codegeneration.model.FunctionApp;
 import com.werner.bl.codegeneration.model.FunctionAppClient;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
+import com.werner.bl.resourcecreation.model.graph.node.ServicePrincipal;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,17 @@ public class PomGenerator {
     private final TemplateResolver templateResolver;
 
     private final String PLACEHOLDER_FUNCTION_APP_NAME = "PLACEHOLDER_FUNCTION_APP_NAME";
+
     private final String PLACEHOLDER_APP_SERVICE_PLAN_NAME = "PLACEHOLDER_APP_SERVICE_PLAN_NAME";
+
     private final String PLACEHOLDER_RESOURCE_GROUP_NAME = "PLACEHOLDER_RESOURCE_GROUP_NAME";
+
+    private final String PLACEHOLDER_SERVICE_PRINCIPAL_CLIENT = "PLACEHOLDER_SERVICE_PRINCIPAL_CLIENT";
+
+    private final String PLACEHOLDER_SERVICE_PRINCIPAL_TENANT = "PLACEHOLDER_SERVICE_PRINCIPAL_TENANT";
+
+    private final String PLACEHOLDER_SERVICE_PRINCIPAL_SECRET = "PLACEHOLDER_SERVICE_PRINCIPAL_SECRET";
+
     private final String PLACEHOLDER_ADDITIONAL_DEPENDENCIES = "PLACEHOLDER_ADDITIONAL_DEPENDENCIES";
 
     private final String PLACEHOLDER_ADDITIONAL_PROPERTIES = "PLACEHOLDER_ADDITIONAL_PROPERTIES";
@@ -31,7 +41,7 @@ public class PomGenerator {
     private final String PLACEHOLDER_APPSETTINGS_VALUE = "PLACEHOLDER_VALUE";
 
 
-    public String generateCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
+    public String generateCode(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, ServicePrincipal servicePrincipal) {
         String result = templateResolver.resolveTemplate(TemplateName.POM);
 
         result = result.replaceAll(PLACEHOLDER_FUNCTION_APP_NAME, project.getArtifactId())
@@ -41,6 +51,9 @@ public class PomGenerator {
         result = insertDependencies(result, triggers, clients);
         result = result.replace(PLACEHOLDER_ADDITIONAL_DEPENDENCIES, "");
 
+        result = result.replace(PLACEHOLDER_SERVICE_PRINCIPAL_CLIENT, servicePrincipal.getAppId())
+                .replace(PLACEHOLDER_SERVICE_PRINCIPAL_SECRET, servicePrincipal.getSecret())
+                .replace(PLACEHOLDER_SERVICE_PRINCIPAL_TENANT, servicePrincipal.getTenant());
 
         String property = "\t\t\t\t\t\t<property>\n\t\t\t\t\t\t\t<name>PLACEHOLDER_KEY</name>\n\t\t\t\t\t\t\t<value>PLACEHOLDER_VALUE</value>\n\t\t\t\t\t\t</property>\n";
 

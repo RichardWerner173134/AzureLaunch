@@ -40,7 +40,7 @@ public class FunctionAppCodeGenerationManager {
 
 		// generate code and projects zipped
 		for (FunctionApp functionApp : functionApps) {
-			Project project = projectGenerator.generateProject(functionApp, appConfig);
+			Project project = projectGenerator.generateProject(functionApp, resourceGraph.getServicePrincipal(), appConfig);
 
 			if(appConfig.isLocalDeploymentOnly()) {
 				int localPortNumber = functionApp.getLocalPortNumber();

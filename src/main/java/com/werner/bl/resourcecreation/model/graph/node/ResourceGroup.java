@@ -9,13 +9,9 @@ public class ResourceGroup extends AbstractResourceNode {
 
     private String resourceGroupLocation;
 
-    public ResourceGroup(String name, ResourceType resourceType, String resourceGroupLocation) {
-        super(name, resourceType);
+    public ResourceGroup(String name, String resourceGroupLocation) {
+        super(name, ResourceType.RESOURCE_GROUP);
 
         this.resourceGroupLocation = resourceGroupLocation;
     }
-
-
-
-
 }

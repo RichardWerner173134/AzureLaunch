@@ -4,6 +4,7 @@ import com.werner.bl.codegeneration.generators.classlevel.ClassGenerator;
 import com.werner.bl.codegeneration.model.FunctionApp;
 import com.werner.bl.codegeneration.model.FunctionAppClient;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
+import com.werner.bl.resourcecreation.model.graph.node.ServicePrincipal;
 import com.werner.helper.FileUtil;
 import com.werner.powershell.PowershellMavenAzFunCaller;
 import generated.internal.v1_0_0.model.AppConfig;
@@ -31,7 +32,7 @@ public class ProjectGenerator {
     private final LocalSettingsGenerator localSettingsGenerator;
 
 
-    public Project generateProject(FunctionApp functionApp, AppConfig appConfig) {
+    public Project generateProject(FunctionApp functionApp, ServicePrincipal servicePrincipal, AppConfig appConfig) {
         String resolvedTempDir = powershellMavenAzFunCaller.getTempDir();
 
         Project project = initProject(functionApp, resolvedTempDir);
@@ -39,7 +40,7 @@ public class ProjectGenerator {
         powershellMavenAzFunCaller.generateProject(project, resolvedTempDir);
 
         writeClassFile(project, functionApp.getTriggerList(), functionApp.getClientList(), appConfig);
-        writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList());
+        writePomFile(project, functionApp.getTriggerList(), functionApp.getClientList(), servicePrincipal);
         writeLocalSettingsFile(project, functionApp.getTriggerList(), functionApp.getClientList());
 
         powershellMavenAzFunCaller.buildProject(project);
@@ -80,8 +81,8 @@ public class ProjectGenerator {
         fileUtil.writeContentToFile(classFilePath, classCode);
     }
 
-    private void writePomFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients) {
-        String pomCode = pomGenerator.generateCode(project, triggers, clients);
+    private void writePomFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, ServicePrincipal servicePrincipal) {
+        String pomCode = pomGenerator.generateCode(project, triggers, clients, servicePrincipal);
         String pomPath = project.getProjectRoot() + "\\pom.xml";
 
         fileUtil.writeContentToFile(pomPath, pomCode);

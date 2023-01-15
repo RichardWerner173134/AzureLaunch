@@ -6,18 +6,19 @@ import lombok.Getter;
 public enum ResourceType {
 
 	SERVICEBUS_NAMESPACE("Microsoft.ServiceBus/namespaces", "sbns"),
+
 	SERVICEBUS_TOPIC("Microsoft.ServiceBus/namespaces/topics", "sbtop"),
+
 	SERVICEBUS_SUBSCRIPTION("Microsoft.ServiceBus/namespaces/topics/Subscriptions", "sbsub"),
 
 	SERVICEBUS_QUEUE("Microsoft.ServiceBus/namespaces/queues", "sbqueue"),
-	STORAGE_ACCOUNT("Microsoft.Storage/storageAccounts", "storacc"),
+
 	FUNCTION_APP("Microsoft.Web/sites", "funcapp"),
+
 	FUNCTION("Microsoft.Web/sites/functions", "func"),
-	APP_SERVICE_ENVIRONMENT("Microsoft.Web/hostingEnvironments", "ase"),
-	VNET("Microsoft.Network/virtualNetworks", "vnet"),
-	KEYVAULT("Microsoft.KeyVault/vaults", "kv"),
-	KEYVAULT_SECRET("Microsoft.KeyVault/vaults/secrets", "kvsec"),
-	RESOURCE_GROUP("ResourceGroup", "rg");
+
+	RESOURCE_GROUP("ResourceGroup", "rg"),
+	;
 
 	private String name;
 	private String shortName;
