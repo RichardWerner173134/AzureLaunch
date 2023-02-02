@@ -9,6 +9,7 @@ import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.*;
+import com.werner.powershell.ServicePrincipalResolver;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
 import generated.internal.v1_0_0.model.GraphNodes;
@@ -21,6 +22,9 @@ import java.util.List;
 @AllArgsConstructor
 @Component
 public class ResourceCreationManager {
+
+	private final ServicePrincipalResolver servicePrincipalResolver;
+
 	private final DependencyHierarchy dependencyHierarchy;
 
 	private final ResourceNodeFactory resourceNodeFactory;
@@ -37,11 +41,10 @@ public class ResourceCreationManager {
 		String appServicePlanName = request.getAzAccount().getAppServicePlanName();
 
 		// ServicePrincipal
-		String servicePrincipalName = request.getAzAccount().getServicePrincipal().getServicePrincipalName();
-		String servicePrincipalAppId = request.getAzAccount().getServicePrincipal().getServicePrincipalAppId();
-		String tenant = request.getAzAccount().getServicePrincipal().getServicePrincipalTenant();
-		String secret = request.getAzAccount().getServicePrincipal().getServicePrincipalSecret();
-		ServicePrincipal servicePrincipal = new ServicePrincipal(servicePrincipalName, servicePrincipalAppId, tenant, secret);
+		String servicePrincipalName = request.getAzAccount().getServicePrincipalName();
+
+		ServicePrincipal servicePrincipal = servicePrincipalResolver.getOrCreateServicePrincipal(
+				servicePrincipalName);
 
 		List<AbstractResourceNode> nodes = new ArrayList<>();
 		List<ResourceEdge> edges = new ArrayList<>();

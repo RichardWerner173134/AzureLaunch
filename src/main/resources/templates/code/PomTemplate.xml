@@ -73,7 +73,7 @@
                     <!-- <pricingTier></pricingTier> -->
                     <!-- Whether to disable application insights, default is false -->
                     <!-- refers https://github.com/microsoft/azure-maven-plugins/wiki/Azure-Functions:-Configuration-Details for all valid configurations for application insights-->
-                    <disableAppInsights>true</disableAppInsights>
+                    <!-- <disableAppInsights>true</disableAppInsights> -->
                     <runtime>
                         <!-- runtime os, could be windows, linux or docker-->
                         <os>windows</os>

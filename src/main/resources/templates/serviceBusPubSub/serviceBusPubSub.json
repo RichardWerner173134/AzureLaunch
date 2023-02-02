@@ -57,7 +57,7 @@
                 "[parameters('serviceBusTopicName')]"
               ],
               "properties": {
-                "lockDuration": "PT1M",
+                "lockDuration": "PT30S",
                 "requiresSession": false,
                 "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
                 "deadLetteringOnMessageExpiration": false,

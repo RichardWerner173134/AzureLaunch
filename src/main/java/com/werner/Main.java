@@ -30,7 +30,7 @@ public class Main implements CommandLineRunner{
     public void run(String... args) {
         String filePath = args.length > 0
                 ? args[0]
-                : "C:\\1_Richard\\htwk\\Vorlesung\\V\\Projekt\\GenerationProject\\specification\\inputFile.json";
+                : "D:\\Masterprojekt\\GenerationProject\\specification\\inputFile.json";
 
         userInputProcessor.process(filePath);
     }
