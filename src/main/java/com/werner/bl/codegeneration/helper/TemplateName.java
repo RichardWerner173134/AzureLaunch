@@ -5,30 +5,32 @@ import lombok.Getter;
 @Getter
 public enum TemplateName {
 
-    FUNCTION_APP_BASE_CLASS("FunctionAppBaseClass.java"),
+    FUNCTION_APP_BASE_CLASS("code/FunctionAppBaseClass.java"),
 
-    POM("PomTemplate.xml"),
+    POM("code/PomTemplate.xml"),
 
-    LOCAL_SETTINGS("LocalSettingsTemplate.json"),
+    LOCAL_SETTINGS("code/LocalSettingsTemplate.json"),
 
-    CLIENT_HTTP_GET("clients/HttpClientGet.java"),
+    CLIENT_HTTP_GET("code/clients/HttpClientGet.java"),
 
-    CLIENT_HTTP_POST("clients/HttpClientPost.java"),
+    CLIENT_HTTP_POST("code/clients/HttpClientPost.java"),
 
-    TRIGGER_SB_QUEUE("triggers/SbQueueTrigger.java"),
+    TRIGGER_SB_QUEUE("code/triggers/SbQueueTrigger.java"),
 
-    TRIGGER_SB_PUB_SUB("triggers/SbPubSubTrigger.java"),
+    TRIGGER_SB_PUB_SUB("code/triggers/SbPubSubTrigger.java"),
 
-    TRIGGER_HTTP_GET("triggers/HttpGetTrigger.java"),
+    TRIGGER_HTTP_GET("code/triggers/HttpGetTrigger.java"),
 
-    TRIGGER_HTTP_POST("triggers/HttpPostTrigger.java"),
+    TRIGGER_HTTP_POST("code/triggers/HttpPostTrigger.java"),
+
+    SCRIPT_SERVICE_PRINCIPAL("servicePrincipal/servicePrincipalScript.ps1")
     ;
 
 
     private String filepath;
 
     private TemplateName(String filepath) {
-        final String templateDir = "src/main/resources/templates/code/";
+        final String templateDir = "src/main/resources/templates/";
 
         this.filepath = templateDir + filepath;
     }

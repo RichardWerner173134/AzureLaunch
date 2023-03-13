@@ -10,10 +10,10 @@ public class UserInputValidator {
 		validateObject(request);
 		validateObject(request.getAppConfig());
 		validateObject(request.getAzAccount());
-		validateObject(request.getAzAccount().getServicePrincipal());
-		validateObject(request.getAzAccount().getServicePrincipal().getServicePrincipalName());
-		validateObject(request.getAzAccount().getServicePrincipal().getServicePrincipalAppId());
-		validateObject(request.getAzAccount().getServicePrincipal().getServicePrincipalTenant());
+		validateObject(request.getAzAccount().getServicePrincipalName());
+		validateObject(request.getAzAccount().getResourceGroupName());
+		validateObject(request.getAzAccount().getResourceGroupLocation());
+		validateObject(request.getAzAccount().getResourceGroupName());
 		validateObject(request.getGraph());
 		validateObject(request.getGraph().getEdges());
 		validateObject(request.getGraph().getNodes());

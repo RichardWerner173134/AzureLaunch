@@ -48,17 +48,8 @@ definitions:
         type: string
       appServicePlanName:
         type: string
-      servicePrincipal:
-        type: object
-        properties:
-          servicePrincipalName:
-            type: string
-          servicePrincipalAppId:
-            type: string
-          servicePrincipalSecret:
-            type: string
-          servicePrincipalTenant:
-            type: string
+      servicePrincipalName:
+        type: string
   graph:
     type: object
     properties:
