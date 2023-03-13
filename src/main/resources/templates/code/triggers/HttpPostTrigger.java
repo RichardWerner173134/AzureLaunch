@@ -6,14 +6,12 @@
             HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
 
-        if (!request.getBody().isPresent()) {
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
-                    .body("No body provided")
-                    .build();
-        }
+            String host = request.getUri().getHost() + ":" + request.getUri().getPort();
 
-        return request.createResponseBuilder(HttpStatus.OK)
-                        .header("Content-Type", "application/json")
-                        .body("Message posted successfully")
-                        .build();
+            context.getLogger().info(request.getHttpMethod().name() + ", " + host + ";\nbody: " + request.getBody().orElse("No body provided"));
+
+            return request.createResponseBuilder(HttpStatus.OK)
+                .header("Content-Type", "text/plain")
+                .body("Message posted successfully to " + host)
+                .build();
     }

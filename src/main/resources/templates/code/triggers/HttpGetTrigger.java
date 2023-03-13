@@ -5,5 +5,11 @@
                         authLevel = AuthorizationLevel.ANONYMOUS)
                 HttpRequestMessage<Optional<String>> request,
                 final ExecutionContext context) {
-            return request.createResponseBuilder(HttpStatus.OK).body("Hello from generated function").build();
+
+                context.getLogger().info(request.getHttpMethod().name() + ", " + request.getUri().getHost() + ":" + request.getUri().getPort());
+
+                return request
+                        .createResponseBuilder(HttpStatus.OK)
+                        .body("This message comes from " + request.getUri().getHost() + ":" + request.getUri().getPort())
+                        .build();
         }

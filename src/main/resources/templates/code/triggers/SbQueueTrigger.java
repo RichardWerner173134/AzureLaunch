@@ -5,5 +5,5 @@
                     connection = "PLACEHOLDER_CONNECTION_STRING") String message,
             final ExecutionContext context
     ) {
-        context.getLogger().info(message);
+            context.getLogger().info("PLACEHOLDER_FUNCTION_NAME triggered with following message: " + message);
     }

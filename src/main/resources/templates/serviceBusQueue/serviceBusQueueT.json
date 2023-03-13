@@ -39,7 +39,7 @@
       "apiVersion": "2022-01-01-preview",
       "name": "[format('{0}/{1}', parameters('serviceBusNamespaceName'), parameters('serviceBusQueueName'))]",
       "properties": {
-        "lockDuration": "PT5M",
+        "lockDuration": "PT30S",
         "maxSizeInMegabytes": 1024,
         "requiresDuplicateDetection": false,
         "requiresSession": false,
