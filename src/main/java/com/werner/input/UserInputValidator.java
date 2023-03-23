@@ -13,7 +13,6 @@ public class UserInputValidator {
 		validateObject(request.getAzAccount().getServicePrincipalName());
 		validateObject(request.getAzAccount().getResourceGroupName());
 		validateObject(request.getAzAccount().getResourceGroupLocation());
-		validateObject(request.getAzAccount().getResourceGroupName());
 		validateObject(request.getGraph());
 		validateObject(request.getGraph().getEdges());
 		validateObject(request.getGraph().getNodes());

@@ -1,57 +1,52 @@
 {
 	"appConfig": {
-		"localDeploymentOnly": true
+		"localDeploymentOnly": false
 	},
 	"azAccount": {
-		"resourceGroupName": "rg-testwerner001",
+		"resourceGroupName": "rg-testwerner003",
 		"resourceGroupLocation": "westus",
-		"appServicePlanName": "asp098237491",
-		"servicePrincipal": {
-			"servicePrincipalName": "testServicePrincipal",
-			"servicePrincipalAppId": "8861f9d2-eb03-4b77-9877-d70b293f9f95",
-			"servicePrincipalSecret": "Xsd8Q~py-b6uigqLYwE9EHjw9ouuOGdac6oxocPC",
-			"servicePrincipalTenant": "7dbee4a3-d935-4716-b330-afffbbbe96a7"
-		}
+		"appServicePlanName": "asp0982374911",
+		"servicePrincipalName": "testServicePrincipal"
 	},
 	"graph": {
 		"nodes": [
 			{
-				"name": "sub01",
+				"name": "sub0001",
 				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
-				"name": "queue01",
+				"name": "queue0001",
 				"type": "Microsoft.ServiceBus/namespaces/queues"
 			},
 			{
-				"name": "funcapp0001",
+				"name": "rwmyfuncapp0001",
 				"type": "Microsoft.Web/sites"
 			},
 			{
-				"name": "funcapp0002",
+				"name": "rwmyfuncapp0002",
 				"type": "Microsoft.Web/sites"
 			}
 		],
 		"edges": [
 			{
-				"node1": "sub01",
-				"node2": "funcapp0001",
+				"node1": "sub0001",
+				"node2": "rwmyfuncapp0001",
 				"type": "read"
 
 			},
 			{
-				"node1": "queue01",
-				"node2": "funcapp0001",
+				"node1": "queue0001",
+				"node2": "rwmyfuncapp0001",
 				"type": "read"
 			},
 			{
-				"node1": "funcapp0001",
-				"node2": "funcapp0002",
+				"node1": "rwmyfuncapp0001",
+				"node2": "rwmyfuncapp0002",
 				"type": "http-get"
 			},
 			{
-				"node1": "funcapp0001",
-				"node2": "funcapp0002",
+				"node1": "rwmyfuncapp0001",
+				"node2": "rwmyfuncapp0002",
 				"type": "http-post"
 			}
 		]
