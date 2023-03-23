@@ -9,6 +9,4 @@ Das erzeugte System erlaubt es, einfach Ressourcen in der Cloud anzulegen und au
 3. [Grundlagen zur Microsoft Azure Cloud](/specification/userguide/azure-basics.md)
 4. [Verwendung des Programms](/specification/userguide/program-usage.md)
 5. [Interpretation der Ergebnisse](/specification/userguide/program-output.md)
-
-# Impressum
-[Impressum](/userguide/impressum.md)
+6. [Impressum](/userguide/impressum.md)
