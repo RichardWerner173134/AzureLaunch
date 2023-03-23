@@ -1,1 +1,0 @@
-# Verwendung des Programs
