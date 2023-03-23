@@ -13,4 +13,4 @@ Following preparations need to be taken:
 
 [Vorheriges Kapitel](/specification/userguide/01-introduction.md)
 [Nächstes Kapitel](/specification/userguide/03-azure-basics.md)
-[Startseite](/readme.md)
+[Startseite](../../readme.md)
