@@ -1,10 +1,10 @@
 package com.werner.powershell;
 
 import com.werner.bl.codegeneration.helper.TemplateResolver;
+import com.werner.bl.exception.ServicePrincipalException;
 import com.werner.bl.resourcecreation.model.graph.node.ServicePrincipal;
-import com.werner.log.PowershellResponse;
-import com.werner.log.PowershellTaskLogger;
-import lombok.AllArgsConstructor;
+import com.werner.log.PowershellTask;
+import com.werner.log.TaskLogger;
 import org.springframework.stereotype.Component;
 
 import static com.werner.bl.codegeneration.helper.TemplateName.SCRIPT_SERVICE_PRINCIPAL;
@@ -20,19 +20,20 @@ public class ServicePrincipalResolver extends AbstractPowershellCaller {
 
 	private final TemplateResolver templateResolver;
 
-	public ServicePrincipalResolver(PowershellTaskLogger logger, TemplateResolver templateResolver) {
+	public ServicePrincipalResolver(TaskLogger logger, TemplateResolver templateResolver) {
 		super(logger);
 		this.templateResolver = templateResolver;
 	}
 
-	public ServicePrincipal getOrCreateServicePrincipal(String spName) {
+	public ServicePrincipal getOrCreateServicePrincipal(String spName) throws ServicePrincipalException {
 
 		String cmd = templateResolver.resolveTemplate(SCRIPT_SERVICE_PRINCIPAL)
 				.replaceAll(PLACEHOLDER_SERVICE_PRINCIPAL_NAME, spName);
 
-		PowershellResponse powershellResponse = executeSingleCommandWithResponse(cmd);
-		logger.addLogItem(powershellResponse, "GetOrCreate ServicePrincipal to deploy functions from - " + spName);
-		String log = powershellResponse.getLog();
+		PowershellTask powershellTask = executeSingleCommandWithResponse(cmd);
+		logger.addLogItem(
+				powershellTask, "GetOrCreate ServicePrincipal to authorize Maven to deploy functions from - " + spName);
+		String log = powershellTask.getLog();
 
 		int i = log.length() - 1;
 		while (true) {
@@ -40,11 +41,16 @@ public class ServicePrincipalResolver extends AbstractPowershellCaller {
 			if (tail.startsWith(prefix)) {
 				String valuesString = tail.replace(prefix, "");
 				String[] values = valuesString.split(delimiter);
-				return new ServicePrincipal(values[0], values[1], values[2], values[3]);
+
+				String name = values[0].replaceAll("\n", "");
+				String appId = values[1].replaceAll("\n", "");
+				String tenant = values[2].replaceAll("\n", "");
+				String secret = values[3].replaceAll("\n", "");
+				return new ServicePrincipal(name, appId, tenant, secret);
 			}
 			i--;
-			if (i == 0) {
-				throw new RuntimeException("Cannot extract values for ServicePrincipal");
+			if (i <= 0) {
+				throw new ServicePrincipalException("Something went wrong while extracting ServicePrincipal information");
 			}
 		}
 	}

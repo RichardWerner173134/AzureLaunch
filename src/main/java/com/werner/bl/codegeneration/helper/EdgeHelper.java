@@ -7,6 +7,8 @@ import com.werner.bl.codegeneration.model.enums.ClientParam;
 import com.werner.bl.codegeneration.model.enums.FunctionAppClientType;
 import com.werner.bl.codegeneration.model.enums.FunctionAppTriggerType;
 import com.werner.bl.codegeneration.model.enums.TriggerParam;
+import com.werner.bl.exception.InvalidInputFileContentException;
+import com.werner.bl.exception.NotImplementedException;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.deployment.Deployment;
@@ -32,7 +34,7 @@ public class EdgeHelper {
     private int nextPortNumber = 8080;
 
     public void functionFunction(ResourceEdge edge, List<FunctionApp> functionApps,
-                                 AppConfig appConfig) {
+                                 AppConfig appConfig) throws InvalidInputFileContentException {
         FunctionApp fa1 = getOrCreateFunctionAppFromList((CodegenResourceNode) edge.getResource1(), functionApps);
         FunctionApp fa2 = getOrCreateFunctionAppFromList((CodegenResourceNode) edge.getResource2(), functionApps);
 
@@ -53,7 +55,10 @@ public class EdgeHelper {
                 client.getClientParams().put(ClientParam.P_JSON_BODY.getValue(), "{\\\"message\\\":\\\"hi\\\"}");
                 break;
             default:
-                throw new RuntimeException("Two functions have to have the edge type get or post");
+                throw new InvalidInputFileContentException("Invalid Inputfile. Two functions have to have the edge type "
+                        + EdgeType.HTTP_GET.getName() + " or " + EdgeType.HTTP_POST.getName() + ". "
+                        + edge.getResource1() + " and " + edge.getResource2()
+                        + " have EdgeType " + edge.getEdgeType().getName());
         }
 
         fa1.addClient(client);
@@ -67,7 +72,7 @@ public class EdgeHelper {
     }
 
     public void functionNoFunction(ResourceEdge edge, List<FunctionApp> functionApps,
-                                   ResourceCreationPlan resourceCreationPlan) {
+                                   ResourceCreationPlan resourceCreationPlan) throws NotImplementedException {
 
         BasicResourceNode nonFunctionResource;
         FunctionApp functionApp;
@@ -89,7 +94,8 @@ public class EdgeHelper {
     }
 
     private void addCodeConstructionUnitsToFunction(BasicResourceNode basicResourceNode, FunctionApp functionApp,
-                                                    Deployment basicResourceDeployment, EdgeType edgeType) {
+                                                    Deployment basicResourceDeployment, EdgeType edgeType)
+            throws NotImplementedException {
 
         ResourceType resourceType = basicResourceNode.getResourceType();
 
@@ -109,7 +115,7 @@ public class EdgeHelper {
 
             trigger.getTriggerParams().put(TriggerParam.P_SERVICEBUS_QUEUE_NAME.getValue(), sbQueue);
         } else if (resourceType == ResourceType.SERVICEBUS_QUEUE && edgeType == EdgeType.WRITE) {
-            throw new RuntimeException("Servicebus binding not implemented yet");
+            throw new NotImplementedException("Servicebus binding not implemented yet");
         } else if (resourceType == ResourceType.SERVICEBUS_SUBSCRIPTION && edgeType == EdgeType.READ) {
             trigger = new FunctionAppTrigger(FunctionAppTriggerType.SERVICE_BUS_PUB_SUB);
             functionApp.addTrigger(trigger);
@@ -127,7 +133,7 @@ public class EdgeHelper {
             trigger.getTriggerParams().put(TriggerParam.P_SERVICEBUS_TOPIC_NAME.getValue(), sbTopic);
             trigger.getTriggerParams().put(TriggerParam.P_SERVICEBUS_SUBSCRIPTION_NAME.getValue(), sbSubscription);
         } else if (resourceType == ResourceType.SERVICEBUS_TOPIC && edgeType == EdgeType.WRITE) {
-            throw new RuntimeException("Servicebus binding not implemented yet");
+            throw new NotImplementedException("Servicebus binding not implemented yet");
         } else {
             throw new RuntimeException("Unknown resource type");
         }

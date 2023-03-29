@@ -1,18 +1,20 @@
 package com.werner.powershell.components;
 
+import com.werner.bl.exception.AzureResourceCreationFailedException;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
-import com.werner.log.PowershellResponse;
-import com.werner.log.PowershellTaskLogger;
+import com.werner.log.PowershellTask;
+import com.werner.log.TaskLogger;
 import com.werner.powershell.AbstractPowershellCaller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractPowershellResourceCreationCaller extends AbstractPowershellCaller {
 
     protected final static String TEMPLATE_DIR = "src\\main\\resources\\templates\\";
 
-    public AbstractPowershellResourceCreationCaller(PowershellTaskLogger logger) {
+    public AbstractPowershellResourceCreationCaller(TaskLogger logger) {
         super(logger);
     }
 
@@ -20,15 +22,26 @@ public abstract class AbstractPowershellResourceCreationCaller extends AbstractP
 
     protected abstract String getScript(ResourceGroup rgNode);
 
-    public void createResourceGroup(ResourceGroup rg) {
+    public void createResourceGroup(ResourceGroup rg) throws AzureResourceCreationFailedException {
         String command = getScript(rg);
-        PowershellResponse powershellResponse = executeSingleCommand(command);
-        logger.addLogItem(powershellResponse, "Creating ResourceGroup");
+        PowershellTask powershellTask = executeSingleCommand(command);
+        logger.addLogItem(powershellTask, "Creating ResourceGroup " + rg.getName());
+        validateAzureResourceCreation(powershellTask);
     }
 
-    public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
+    public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup)
+            throws AzureResourceCreationFailedException {
         String command = getScript(resourceFamily, resourceGroup);
-        PowershellResponse powershellResponse = executeSingleCommand(command);
-        logger.addLogItem(powershellResponse, "Creating Resource in ResourceGroup");
+        PowershellTask powershellTask = executeSingleCommand(command);
+        String resourceName = resourceFamily.stream().map(n -> n.getName()).collect(Collectors.joining(", "));
+        logger.addLogItem(powershellTask, "Creating Resource {" + resourceName + "} in ResourceGroup " + resourceGroup);
+        validateAzureResourceCreation(powershellTask);
+    }
+
+    private void validateAzureResourceCreation(PowershellTask powershellTask) throws AzureResourceCreationFailedException {
+        if(powershellTask.getExitCode() == 0) {
+            return;
+        }
+        throw new AzureResourceCreationFailedException("Resource deployment failed. \n" + powershellTask.getErrorLog());
     }
 }

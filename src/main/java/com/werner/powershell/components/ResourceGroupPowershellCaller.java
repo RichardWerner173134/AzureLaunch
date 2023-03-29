@@ -2,7 +2,7 @@ package com.werner.powershell.components;
 
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
-import com.werner.log.PowershellTaskLogger;
+import com.werner.log.TaskLogger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class ResourceGroupPowershellCaller extends AbstractPowershellResourceCre
 
     private final String SCRIPT = "New-AzResourceGroup -Name %s -Location %s -Force";
 
-    public ResourceGroupPowershellCaller(PowershellTaskLogger logger) {
+    public ResourceGroupPowershellCaller(TaskLogger logger) {
         super(logger);
     }
 

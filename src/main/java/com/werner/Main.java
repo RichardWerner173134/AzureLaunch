@@ -1,5 +1,6 @@
 package com.werner;
 
+import com.werner.bl.exception.InvalidArgumentsException;
 import com.werner.bl.processor.UserInputProcessor;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -28,22 +29,32 @@ public class Main implements ApplicationRunner {
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(Main.class);
         application.setWebApplicationType(WebApplicationType.NONE);
-        ConfigurableApplicationContext run = application.run(args);
+        try {
+            application.run(args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
-
-        //"C:\\1_Richard\\htwk\\Vorlesung\\V\\Projekt\\GenerationProject\\specification\\inputFile.json";
-
-        if(args.containsOption("dest") == false) {
-            throw new Exception("Please provide the argument --dest");
+        String filePath;
+        try {
+            filePath = extractDestinationArgument(args);
+        } catch (InvalidArgumentsException e) {
+            LOGGER.error(e.getMessage());
+            return;
         }
 
-        List<String> dest = args.getOptionValues("dest");
-        String filePath = dest.get(0);
-
         userInputProcessor.process(filePath);
+    }
+
+    private String extractDestinationArgument(ApplicationArguments args) throws InvalidArgumentsException {
+        if (args.containsOption("dest") == false) {
+            throw new InvalidArgumentsException("Please provide the argument --dest");
+        }
+        List<String> dest = args.getOptionValues("dest");
+        return dest.get(0);
     }
 }

@@ -1,5 +1,6 @@
 package com.werner.bl.resourcecreation.model;
 
+import com.werner.bl.exception.InvalidInputFileContentException;
 import lombok.Getter;
 
 @Getter
@@ -28,12 +29,12 @@ public enum ResourceType {
 		this.shortName = shortName;
 	}
 
-	public static ResourceType findById(String id){
+	public static ResourceType findById(String id) throws InvalidInputFileContentException {
 		for(ResourceType t : ResourceType.values()) {
 			if(t.name.equals(id)) {
 				return t;
 			}
 		}
-		return null;
+		throw new InvalidInputFileContentException("Invalid Inputfile. Unknown AzureResourceType: " + id);
 	}
 }

@@ -1,10 +1,8 @@
 package com.werner.powershell;
 
 import com.werner.bl.codegeneration.generators.projectlevel.Project;
-import com.werner.log.PowershellResponse;
-import com.werner.log.PowershellTaskLogger;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import com.werner.log.PowershellTask;
+import com.werner.log.TaskLogger;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -12,7 +10,7 @@ import java.util.*;
 @Component
 public class PowershellMavenAzFunCaller extends AbstractPowershellCaller {
 
-    public PowershellMavenAzFunCaller(PowershellTaskLogger logger) {
+    public PowershellMavenAzFunCaller(TaskLogger logger) {
         super(logger);
     }
 
@@ -40,20 +38,20 @@ public class PowershellMavenAzFunCaller extends AbstractPowershellCaller {
         for (Map.Entry<String, String> task : commands.entrySet()) {
             String taskName = task.getKey();
             String command = task.getValue();
-            PowershellResponse powershellResponse = executeSingleCommand(command);
-            logger.addLogItem(powershellResponse, taskName);
+            PowershellTask powershellTask = executeSingleCommand(command);
+            logger.addLogItem(powershellTask, taskName);
         }
     }
 
     public void buildProject(Project project) {
         String command = String.format("mvn clean package -f %s", project.getProjectRoot());
-        PowershellResponse powershellResponse = executeSingleCommand(command);
-        logger.addLogItem(powershellResponse, "Building Maven Project - " + project.getArtifactId());
+        PowershellTask powershellTask = executeSingleCommand(command);
+        logger.addLogItem(powershellTask, "Building Maven Project - " + project.getArtifactId());
     }
 
     public void deployProject(Project project) {
         String command = String.format("mvn azure-functions:deploy -f %s\\pom.xml", project.getProjectRoot());
-        PowershellResponse powershellResponse = executeSingleCommand(command);
-        logger.addLogItem(powershellResponse, "Deploying Maven Project - " + project.getArtifactId());
+        PowershellTask powershellTask = executeSingleCommand(command);
+        logger.addLogItem(powershellTask, "Deploying Maven Project - " + project.getArtifactId());
     }
 }

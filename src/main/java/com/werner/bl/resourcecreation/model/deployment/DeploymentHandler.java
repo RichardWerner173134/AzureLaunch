@@ -1,5 +1,6 @@
 package com.werner.bl.resourcecreation.model.deployment;
 
+import com.werner.bl.exception.AzureResourceCreationFailedException;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
 import com.werner.powershell.components.ResourceGroupPowershellCaller;
@@ -26,7 +27,7 @@ public class DeploymentHandler {
 		this.serviceBusSubscriptionPowershellCaller = serviceBusSubscriptionPowershellCaller;
 	}
 
-	public void deploy(Deployment deployment) {
+	public void deploy(Deployment deployment) throws AzureResourceCreationFailedException {
 
 		AbstractResourceNode firstResource = deployment.getDeploymentComposite().get(0);
 

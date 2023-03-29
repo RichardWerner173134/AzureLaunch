@@ -3,7 +3,7 @@ package com.werner.powershell.components;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
-import com.werner.log.PowershellTaskLogger;
+import com.werner.log.TaskLogger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class ServiceBusQueuePowershellCaller extends AbstractPowershellResourceC
             + "$parameters.Add('serviceBusQueueName', '%s'); "
             + "New-AzResourceGroupDeployment -ResourceGroupName %s -TemplateFile %s -TemplateParameterObject $parameters";
 
-    public ServiceBusQueuePowershellCaller(PowershellTaskLogger logger) {
+    public ServiceBusQueuePowershellCaller(TaskLogger logger) {
         super(logger);
     }
 

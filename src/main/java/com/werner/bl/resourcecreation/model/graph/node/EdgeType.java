@@ -1,5 +1,6 @@
 package com.werner.bl.resourcecreation.model.graph.node;
 
+import com.werner.bl.exception.InvalidInputFileContentException;
 import lombok.Getter;
 
 @Getter
@@ -28,13 +29,13 @@ public enum EdgeType {
         this.name = name;
     }
 
-    public static EdgeType findById(String id) {
+    public static EdgeType findById(String id) throws InvalidInputFileContentException {
         for (EdgeType value : values()) {
             if(id.equals(value.getName())) {
                 return value;
             }
         }
 
-        throw new UnsupportedOperationException("Id not found: " + id);
+        throw new InvalidInputFileContentException("Invalid InputFile. Unknown EdgeType: " + id);
     }
 }

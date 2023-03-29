@@ -1,5 +1,8 @@
 package com.werner.bl.resourcecreation;
 
+import com.werner.bl.exception.AzureResourceCreationFailedException;
+import com.werner.bl.exception.InvalidInputFileContentException;
+import com.werner.bl.exception.ServicePrincipalException;
 import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.dependency.Dependency;
@@ -31,7 +34,8 @@ public class ResourceCreationManager {
 
 	private final DeploymentHandler deploymentHandler;
 
-	public ResourceGraph computeResourceGraph(AzCodegenRequest request) {
+	public ResourceGraph computeResourceGraph(AzCodegenRequest request)
+			throws ServicePrincipalException, InvalidInputFileContentException {
 		// resourceGroup
 		ResourceGroup resourceGroup = new ResourceGroup(
 				request.getAzAccount().getResourceGroupName(),
@@ -58,17 +62,9 @@ public class ResourceCreationManager {
 		}
 
 		for (GraphEdges edge : request.getGraph().getEdges()) {
-			AbstractResourceNode node1  = null;
-			AbstractResourceNode node2 = null;
 
-			try {
-				node1 = nodes.stream().filter(x -> x.getName().equals(edge.getNode1()))
-						.findFirst().orElseThrow(() -> new Exception("node 1 not found in edges list: " + edge));
-				node2 = nodes.stream().filter(x -> x.getName().equals(edge.getNode2()))
-						.findFirst().orElseThrow(() -> new Exception("node 2 not found in edges list" + edge));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			AbstractResourceNode node1 = nodes.stream().filter(x -> x.getName().equals(edge.getNode1())).findFirst().get();
+			AbstractResourceNode node2 = nodes.stream().filter(x -> x.getName().equals(edge.getNode2())).findFirst().get();
 
 			String type = edge.getType();
 			EdgeType edgeType = EdgeType.findById(type);
@@ -105,7 +101,8 @@ public class ResourceCreationManager {
 		return resourceCreationPlan;
 	}
 
-	public void createAzResources(ResourceCreationPlan resourceCreationPlan) {
+	public void createAzResources(ResourceCreationPlan resourceCreationPlan)
+			throws AzureResourceCreationFailedException {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.deploy(deployment);
 		}
