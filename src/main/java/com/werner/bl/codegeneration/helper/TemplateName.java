@@ -23,14 +23,17 @@ public enum TemplateName {
 
     TRIGGER_HTTP_POST("code/triggers/HttpPostTrigger.java"),
 
-    SCRIPT_SERVICE_PRINCIPAL("servicePrincipal/servicePrincipalScript.ps1")
+    SCRIPT_SERVICE_PRINCIPAL("servicePrincipal/servicePrincipalScript.ps1"),
+
+    SCRIPT_SERVICEBUS_PUB_SUB("serviceBusPubSub/serviceBusPubSub.json"),
+    SCRIPT_SERVICEBUS_QUEUE("serviceBusQueue/serviceBusQueue.json"),
     ;
 
 
     private String filepath;
 
     private TemplateName(String filepath) {
-        final String templateDir = "src/main/resources/templates/";
+        final String templateDir = "templates/";
 
         this.filepath = templateDir + filepath;
     }

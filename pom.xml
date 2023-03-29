@@ -149,6 +149,23 @@
           </execution>
         </executions>
       </plugin>
+      <!-- SPRINGBOOT FatJar builder -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <finalName>${project.artifactId}</finalName>
+              <mainClass>com.werner.Main</mainClass>
+              <classifier>exec</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

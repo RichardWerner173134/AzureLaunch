@@ -7,18 +7,20 @@ import com.werner.log.PowershellTask;
 import com.werner.log.TaskLogger;
 import com.werner.powershell.AbstractPowershellCaller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractPowershellResourceCreationCaller extends AbstractPowershellCaller {
 
-    protected final static String TEMPLATE_DIR = "src\\main\\resources\\templates\\";
+    protected final static String TEMPLATE_DIR = "templates\\";
 
     public AbstractPowershellResourceCreationCaller(TaskLogger logger) {
         super(logger);
     }
 
-    protected abstract String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup);
+    protected abstract String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup)
+            throws IOException;
 
     protected abstract String getScript(ResourceGroup rgNode);
 
@@ -30,7 +32,7 @@ public abstract class AbstractPowershellResourceCreationCaller extends AbstractP
     }
 
     public void createResourceInResourceGroup(List<AbstractResourceNode> resourceFamily, String resourceGroup)
-            throws AzureResourceCreationFailedException {
+            throws AzureResourceCreationFailedException, IOException {
         String command = getScript(resourceFamily, resourceGroup);
         PowershellTask powershellTask = executeSingleCommand(command);
         String resourceName = resourceFamily.stream().map(n -> n.getName()).collect(Collectors.joining(", "));

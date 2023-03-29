@@ -4,6 +4,8 @@ import com.werner.bl.exception.InvalidInputFileException;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Component
 public class FileUtil {
@@ -36,6 +38,11 @@ public class FileUtil {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(f));
         bufferedWriter.write(content);
         bufferedWriter.close();
+    }
 
+    public Path createTempFile(String fileContent) throws IOException {
+        Path tempFile = Files.createTempFile(null, ".json");
+        Files.write(tempFile, fileContent.getBytes());
+        return tempFile;
     }
 }

@@ -2,26 +2,27 @@ package com.werner.bl.codegeneration.helper;
 
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 @Component
 public class TemplateResolver {
 
     public String resolveTemplate(TemplateName templateName) {
         String filepath = templateName.getFilepath();
-        return readSampleFile(new File(filepath));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filepath);
+        String template = readSampleFile(inputStream);
+        return template;
     }
 
-    private String readSampleFile(File file) {
-        try {
+    private String readSampleFile(InputStream inputStream) {
+        try (InputStreamReader streamReader =
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                BufferedReader reader = new BufferedReader(streamReader)){
             String content = "";
-            BufferedReader bufferedReader = null;
-            bufferedReader = new BufferedReader(new FileReader(file));
             String line = "";
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 content += line + "\n";
             }
             return content;

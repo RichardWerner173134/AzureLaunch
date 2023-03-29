@@ -19,6 +19,7 @@ import generated.internal.v1_0_0.model.GraphNodes;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class ResourceCreationManager {
 	}
 
 	public void createAzResources(ResourceCreationPlan resourceCreationPlan)
-			throws AzureResourceCreationFailedException {
+			throws AzureResourceCreationFailedException, IOException {
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.deploy(deployment);
 		}

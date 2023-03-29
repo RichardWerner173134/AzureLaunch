@@ -8,6 +8,7 @@ import com.werner.powershell.components.ServiceBusQueuePowershellCaller;
 import com.werner.powershell.components.ServiceBusSubscriptionPowershellCaller;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 
 @Component
 public class DeploymentHandler {
@@ -27,7 +28,7 @@ public class DeploymentHandler {
 		this.serviceBusSubscriptionPowershellCaller = serviceBusSubscriptionPowershellCaller;
 	}
 
-	public void deploy(Deployment deployment) throws AzureResourceCreationFailedException {
+	public void deploy(Deployment deployment) throws AzureResourceCreationFailedException, IOException {
 
 		AbstractResourceNode firstResource = deployment.getDeploymentComposite().get(0);
 

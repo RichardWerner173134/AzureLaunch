@@ -21,8 +21,6 @@ import java.util.List;
 public class Main implements ApplicationRunner {
     private final UserInputProcessor userInputProcessor;
 
-    private final ApplicationArguments applicationArguments;
-
     private static Logger LOGGER = LoggerFactory
             .getLogger(Main.class);
 

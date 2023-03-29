@@ -26,6 +26,6 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: Jar
-          path: target/GenerationProject-1.0-SNAPSHOT.jar
+          path: target/GenerationProject-exec.jar
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v2.1.1
