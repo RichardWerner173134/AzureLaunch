@@ -1,9 +1,15 @@
 package com.werner.powershell;
 
+import com.werner.log.PowershellResponse;
+import com.werner.log.PowershellTaskLogger;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ServiceBusResolver extends AbstractPowershellCaller {
+
+    public ServiceBusResolver(PowershellTaskLogger logger) {
+        super(logger);
+    }
 
     public String resolveServiceBusConnectionString(String rg, String sbns) {
         StringBuilder sb = new StringBuilder();
@@ -15,7 +21,9 @@ public class ServiceBusResolver extends AbstractPowershellCaller {
 
         String cmd = String.format(sb.toString(), sbns, rg);
 
+        PowershellResponse powershellResponse = executeSingleCommandWithResponse(cmd);
+        logger.addLogItem(powershellResponse, "Resolving Connectionstring of " + sbns);
 
-        return executeSingleCommandWithResponse(cmd);
+        return powershellResponse.getLog().substring(0, powershellResponse.getLog().indexOf("\n"));
     }
 }

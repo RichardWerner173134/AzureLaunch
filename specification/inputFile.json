@@ -1,6 +1,6 @@
 {
 	"appConfig": {
-		"localDeploymentOnly": false
+		"localDeploymentOnly": true
 	},
 	"azAccount": {
 		"resourceGroupName": "rg-testwerner003",

@@ -6,6 +6,7 @@ import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.input.UserInputReader;
 import com.werner.input.UserInputValidator;
+import com.werner.log.PowershellTaskLogger;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,8 @@ public class UserInputProcessor {
 
 	private final FunctionAppCodeGenerationManager functionAppCodeGenerationManager;
 
+	private final PowershellTaskLogger powershellTaskLogger;
+
 	public void process(String filePath) {
 
 		AzCodegenRequest parseFileRequest = userInputReader.readUserInput(filePath);
@@ -35,5 +38,7 @@ public class UserInputProcessor {
 
 		// create all Functionapp related things
 		functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph, resourceCreationPlan, parseFileRequest.getAppConfig());
+
+		powershellTaskLogger.saveLogsToFile();
 	}
 }

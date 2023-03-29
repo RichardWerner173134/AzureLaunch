@@ -1,16 +1,23 @@
 package com.werner.powershell;
 
 import com.werner.bl.codegeneration.generators.projectlevel.Project;
+import com.werner.log.PowershellResponse;
+import com.werner.log.PowershellTaskLogger;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class PowershellMavenAzFunCaller extends AbstractPowershellCaller {
 
+    public PowershellMavenAzFunCaller(PowershellTaskLogger logger) {
+        super(logger);
+    }
+
     public void generateProject(Project project, String resolvedTempDir) {
-        List<String> commands = new ArrayList<>();
+        Map<String, String> commands = new LinkedHashMap<>();
 
         // generate new mavenProject
         StringBuilder sb = new StringBuilder();
@@ -20,25 +27,33 @@ public class PowershellMavenAzFunCaller extends AbstractPowershellCaller {
         sb.append(String.format("-DgroupId='%s' -DartifactId='%s' -Dversion='1.0.0' ", project.getGroupId(), project.getArtifactId()));
         sb.append(String.format("-Dpackage='%s.%s' ", project.getGroupId(), project.getArtifactId()));
         sb.append(String.format("-DoutputDirectory='%s'", resolvedTempDir));
-        commands.add(sb.toString());
+        commands.put("Generate New Project from Archetype - " + project.getArtifactId(), sb.toString());
 
         // delete classes
         String unnessecaryClassFilePath = project.getProjectRoot() + "\\src\\main\\java\\com\\werner\\" + project.getArtifactId() + "\\Function.java";
-        commands.add(String.format("Remove-Item %s", unnessecaryClassFilePath));
+        commands.put("Removing Archetype Generated Class - " + project.getArtifactId(), String.format("Remove-Item %s", unnessecaryClassFilePath));
 
         // delete tests
-        commands.add(String.format("Remove-Item %s\\src\\test -Recurse", project.getProjectRoot()));
+        commands.put("Removing Archetype Generated Tests - " + project.getArtifactId(), String.format("Remove-Item %s\\src\\test -Recurse", project.getProjectRoot()));
 
-        executeCommandChain(commands);
+        // execute all commands in order
+        for (Map.Entry<String, String> task : commands.entrySet()) {
+            String taskName = task.getKey();
+            String command = task.getValue();
+            PowershellResponse powershellResponse = executeSingleCommand(command);
+            logger.addLogItem(powershellResponse, taskName);
+        }
     }
 
     public void buildProject(Project project) {
         String command = String.format("mvn clean package -f %s", project.getProjectRoot());
-        executeSingleCommand(command);
+        PowershellResponse powershellResponse = executeSingleCommand(command);
+        logger.addLogItem(powershellResponse, "Building Maven Project - " + project.getArtifactId());
     }
 
     public void deployProject(Project project) {
         String command = String.format("mvn azure-functions:deploy -f %s\\pom.xml", project.getProjectRoot());
-        executeSingleCommand(command);
+        PowershellResponse powershellResponse = executeSingleCommand(command);
+        logger.addLogItem(powershellResponse, "Deploying Maven Project - " + project.getArtifactId());
     }
 }

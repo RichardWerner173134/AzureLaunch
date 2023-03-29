@@ -2,13 +2,14 @@ package com.werner.powershell;
 
 import com.werner.bl.codegeneration.helper.TemplateResolver;
 import com.werner.bl.resourcecreation.model.graph.node.ServicePrincipal;
+import com.werner.log.PowershellResponse;
+import com.werner.log.PowershellTaskLogger;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static com.werner.bl.codegeneration.helper.TemplateName.SCRIPT_SERVICE_PRINCIPAL;
 
 @Component
-@AllArgsConstructor
 public class ServicePrincipalResolver extends AbstractPowershellCaller {
 
 	private final String PLACEHOLDER_SERVICE_PRINCIPAL_NAME = "PLACEHOLDER_SERVICE_PRINCIPAL_NAME";
@@ -19,16 +20,23 @@ public class ServicePrincipalResolver extends AbstractPowershellCaller {
 
 	private final TemplateResolver templateResolver;
 
+	public ServicePrincipalResolver(PowershellTaskLogger logger, TemplateResolver templateResolver) {
+		super(logger);
+		this.templateResolver = templateResolver;
+	}
+
 	public ServicePrincipal getOrCreateServicePrincipal(String spName) {
 
 		String cmd = templateResolver.resolveTemplate(SCRIPT_SERVICE_PRINCIPAL)
 				.replaceAll(PLACEHOLDER_SERVICE_PRINCIPAL_NAME, spName);
 
-		String s = executeSingleCommandWithResponse(cmd);
+		PowershellResponse powershellResponse = executeSingleCommandWithResponse(cmd);
+		logger.addLogItem(powershellResponse, "GetOrCreate ServicePrincipal to deploy functions from - " + spName);
+		String log = powershellResponse.getLog();
 
-		int i = s.length() - 1;
+		int i = log.length() - 1;
 		while (true) {
-			String tail = s.substring(i);
+			String tail = log.substring(i);
 			if (tail.startsWith(prefix)) {
 				String valuesString = tail.replace(prefix, "");
 				String[] values = valuesString.split(delimiter);

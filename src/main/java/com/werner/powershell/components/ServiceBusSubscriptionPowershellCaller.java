@@ -3,6 +3,7 @@ package com.werner.powershell.components;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.node.AbstractResourceNode;
 import com.werner.bl.resourcecreation.model.graph.node.ResourceGroup;
+import com.werner.log.PowershellTaskLogger;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class ServiceBusSubscriptionPowershellCaller extends AbstractPowershellRe
     private final String SCRIPT_NAME = "serviceBusPubSub.json";
 
     private final String SERVICEBUS_PUB_SUB_TEMPLATE_DIR = TEMPLATE_DIR + "serviceBusPubSub\\";
+
+    public ServiceBusSubscriptionPowershellCaller(PowershellTaskLogger logger) {
+        super(logger);
+    }
 
     protected String getScript(List<AbstractResourceNode> resourceFamily, String resourceGroup) {
         String sbns = resourceFamily.stream().filter(r -> r.getResourceType() == ResourceType.SERVICEBUS_NAMESPACE).findFirst().get().getName();

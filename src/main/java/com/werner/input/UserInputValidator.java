@@ -20,7 +20,7 @@ public class UserInputValidator {
 
 	private void validateObject(Object object) {
 		if(object == null) {
-			throw new IllegalStateException("Object is null: " + object.toString());
+			throw new IllegalStateException("Object is null");
 		}
 	}
 }
