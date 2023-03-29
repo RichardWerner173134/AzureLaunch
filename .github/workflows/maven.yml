@@ -29,3 +29,10 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Archive Jar
+        uses: actions/upload-artifact@v2
+        with:
+          name: Jar
+          path: target/GenerationProject-1.0-SNAPSHOT.jar
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v2
