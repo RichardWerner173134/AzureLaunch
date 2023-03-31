@@ -47,10 +47,8 @@ public class UserInputProcessor {
 			functionAppCodeGenerationManager.generateAndDeployFunctionApps(resourceGraph, resourceCreationPlan,
 					parseFileRequest.getAppConfig());
 
-		} catch (InvalidInputFileContentException | InvalidInputFileException | ServicePrincipalException | AzureResourceCreationFailedException | NotImplementedException e) {
+		} catch (InvalidInputFileContentException | InvalidInputFileException | ServicePrincipalException | AzureResourceCreationFailedException | NotImplementedException | IOException e) {
 			LOGGER.error(e.getMessage());
-		} catch (IOException e) {
-			int c = 0;
 		} finally {
 			taskLogger.saveLogsToFile();
 		}
