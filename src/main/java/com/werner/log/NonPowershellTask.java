@@ -18,6 +18,6 @@ public class NonPowershellTask extends AbstractTask {
 
 	@Override
 	protected String getLongLoggableDescription() {
-		return "Taskname: " + description;
+		return "Taskname: " + taskName +  "\n\nDescription: " + description;
 	}
 }
