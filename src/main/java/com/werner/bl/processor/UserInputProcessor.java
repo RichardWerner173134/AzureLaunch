@@ -40,6 +40,7 @@ public class UserInputProcessor {
 
 			ResourceGraph resourceGraph = resourceCreationManager.computeResourceGraph(parseFileRequest);
 			ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
+
 			resourceCreationManager.createAzResources(resourceCreationPlan);
 
 			// create all Functionapp related things

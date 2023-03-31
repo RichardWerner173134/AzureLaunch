@@ -3,21 +3,21 @@ package com.werner.log;
 import lombok.Getter;
 
 @Getter
-public class NonPowershellTask extends AbstractTask {
+public class JavaTask extends AbstractTask {
 
 	private String description;
 
-	public NonPowershellTask(String description) {
+	public JavaTask(String description) {
 		this.description = description;
 	}
 
 	@Override
 	protected String getShortLoggableDescription() {
-		return "Taskname: " + taskName;
+		return "JTaskname: " + taskName;
 	}
 
 	@Override
 	protected String getLongLoggableDescription() {
-		return "Taskname: " + taskName +  "\n\nDescription: " + description;
+		return "JTaskname: " + taskName +  "\n\nDescription: " + description;
 	}
 }

@@ -12,8 +12,6 @@ import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.*;
-import com.werner.log.NonPowershellTask;
-import com.werner.log.TaskGroup;
 import com.werner.log.TaskLogger;
 import com.werner.powershell.ServicePrincipalResolver;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
@@ -109,7 +107,7 @@ public class ResourceCreationManager {
 
 	public void createAzResources(ResourceCreationPlan resourceCreationPlan)
 			throws AzureResourceCreationFailedException, IOException {
-		taskLogger.beginNewTaskGroup("Using ARM-Templates to create resources");
+		taskLogger.beginNewTaskGroup("Using ARM-Templates to create Non-Compute Resources");
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.deploy(deployment);
 		}

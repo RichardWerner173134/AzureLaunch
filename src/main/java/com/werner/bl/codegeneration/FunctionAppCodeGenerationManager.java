@@ -11,7 +11,7 @@ import com.werner.bl.resourcecreation.model.ResourceCreationPlan;
 import com.werner.bl.resourcecreation.model.ResourceType;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
-import com.werner.log.NonPowershellTask;
+import com.werner.log.JavaTask;
 import com.werner.log.TaskLogger;
 import generated.internal.v1_0_0.model.AppConfig;
 import lombok.AllArgsConstructor;
@@ -53,9 +53,9 @@ public class FunctionAppCodeGenerationManager {
 				localFunctionExecutor.startFunction(targetFolderPath, localPortNumber);
 
 				String description = "cd " + targetFolderPath + "\nfunc start --port " + localPortNumber;
-				String taskName = "Local FunctionApp Start - " + functionApp.getFunctionAppName();
-				NonPowershellTask nonPowershellTask = new NonPowershellTask(description);
-				taskLogger.addLogItem(nonPowershellTask, taskName);
+				String taskName = "Local FunctionApp Start";
+				JavaTask javaTask = new JavaTask(description);
+				taskLogger.addLogItem(javaTask, taskName);
 			}
 			taskLogger.endTaskGroup();
 		}

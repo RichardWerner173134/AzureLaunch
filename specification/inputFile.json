@@ -1,6 +1,6 @@
 {
 	"appConfig": {
-		"localDeploymentOnly": true
+		"localDeploymentOnly": false
 	},
 	"azAccount": {
 		"resourceGroupName": "example-resourcegroupname",

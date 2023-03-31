@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class PowershellTask extends AbstractTask {
-	private String command;
 
 	private String log;
 
@@ -13,8 +12,6 @@ public class PowershellTask extends AbstractTask {
 	private int exitCode;
 
 	public PowershellTask(String log, String errorLog, int exitCode) {
-		// TODO add command as parameter
-		this.command = "asdasd";
 		this.log = log;
 		this.errorLog = errorLog;
 		this.exitCode = exitCode;
@@ -22,12 +19,12 @@ public class PowershellTask extends AbstractTask {
 
 	@Override
 	protected String getShortLoggableDescription() {
-		return "Taskname: " + this.getTaskName() + " - ExitCode: " + this.getExitCode();
+		return "PSTaskname: " + this.getTaskName() + " - ExitCode: " + this.getExitCode();
 	}
 
 	@Override
 	protected String getLongLoggableDescription() {
-		String renderedTaskName = "Taskname: " + taskName;
+		String renderedTaskName = "PSTaskname: " + taskName;
 		String renderedExitCode = "ExitCode: " + exitCode;
 		String renderedLogPart = "Log:\n" + log;
 		String renderedErrorLogPart = "Errors:\n" + errorLog;

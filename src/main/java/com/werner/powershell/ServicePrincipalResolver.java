@@ -32,7 +32,7 @@ public class ServicePrincipalResolver extends AbstractPowershellCaller {
 
 		PowershellTask powershellTask = executeSingleCommandWithResponse(cmd);
 		logger.addLogItem(
-				powershellTask, "GetOrCreate ServicePrincipal to authorize Maven to deploy functions from - " + spName);
+				powershellTask, "GetOrCreate ServicePrincipal - " + spName);
 		String log = powershellTask.getLog();
 
 		int i = log.length() - 1;

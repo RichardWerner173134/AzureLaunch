@@ -6,7 +6,7 @@ import com.werner.bl.codegeneration.model.FunctionAppClient;
 import com.werner.bl.codegeneration.model.FunctionAppTrigger;
 import com.werner.bl.resourcecreation.model.graph.node.ServicePrincipal;
 import com.werner.helper.FileUtil;
-import com.werner.log.NonPowershellTask;
+import com.werner.log.JavaTask;
 import com.werner.log.TaskLogger;
 import com.werner.powershell.PowershellMavenAzFunCaller;
 import generated.internal.v1_0_0.model.AppConfig;
@@ -78,9 +78,9 @@ public class ProjectGenerator {
 
         String classFilePath = project.getProjectRoot() + "\\src\\main\\java\\com\\werner\\" + project.getArtifactId() + "\\GeneratedClass.java";
         fileUtil.writeContentToFile(classFilePath, classCode);
-        NonPowershellTask nonPowershellTask = new NonPowershellTask(
+        JavaTask javaTask = new JavaTask(
                 "Generate a file in " + classFilePath + " and where the triggers and bindings are added to as code");
-        taskLogger.addLogItem(nonPowershellTask, "Generating Java Class for Trigger and Bindings");
+        taskLogger.addLogItem(javaTask, "Generating Java Class for Trigger and Bindings");
     }
 
     private void writePomFile(Project project, List<FunctionAppTrigger> triggers, List<FunctionAppClient> clients, ServicePrincipal servicePrincipal)
@@ -89,8 +89,8 @@ public class ProjectGenerator {
         String pomPath = project.getProjectRoot() + "\\pom.xml";
 
         fileUtil.writeContentToFile(pomPath, pomCode);
-        NonPowershellTask nonPowershellTask = new NonPowershellTask("Delete " + pomPath + " and create a new one");
-        taskLogger.addLogItem(nonPowershellTask, "Generating Pom");
+        JavaTask javaTask = new JavaTask("Delete " + pomPath + " and create a new one");
+        taskLogger.addLogItem(javaTask, "Generating Pom");
     }
 
     private void writeLocalSettingsFile(Project project, List<FunctionAppTrigger> triggerList,
@@ -99,7 +99,7 @@ public class ProjectGenerator {
 
         String localSettingsPath = project.getProjectRoot() + "\\local.settings.json";
         fileUtil.writeContentToFile(localSettingsPath, localSettingsCode);
-        NonPowershellTask nonPowershellTask = new NonPowershellTask("Delete " + localSettingsPath + " and add a new one");
-        taskLogger.addLogItem(nonPowershellTask, "Generating localSettings");
+        JavaTask javaTask = new JavaTask("Delete " + localSettingsPath + " and add a new one");
+        taskLogger.addLogItem(javaTask, "Generating localSettings");
     }
 }
