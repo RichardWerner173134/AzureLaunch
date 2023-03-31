@@ -52,7 +52,7 @@ public class FunctionAppCodeGenerationManager {
 				String targetFolderPath = project.getProjectRoot() + "\\target\\azure-functions\\" + functionApp.getFunctionAppName();
 				localFunctionExecutor.startFunction(targetFolderPath, localPortNumber);
 
-				String description = "\ncd " + targetFolderPath + "\nfunc start --port " + localPortNumber;
+				String description = "Start functions locally\ncd " + targetFolderPath + "\nfunc start --port " + localPortNumber;
 				String taskName = "Local FunctionApp Start";
 				JavaTask javaTask = new JavaTask(description);
 				taskLogger.addLogItem(javaTask, taskName);
