@@ -3,51 +3,45 @@
 		"localDeploymentOnly": true
 	},
 	"azAccount": {
-		"resourceGroupName": "rg-testwerner003",
+		"resourceGroupName": "example-resourcegroupname",
 		"resourceGroupLocation": "westus",
-		"appServicePlanName": "asp0982374911",
-		"servicePrincipalName": "testServicePrincipal"
+		"appServicePlanName": "example-aspname",
+		"servicePrincipalName": "example-serviceprincipal"
 	},
 	"graph": {
 		"nodes": [
 			{
-				"name": "sub0001",
+				"name": "example-subscription",
 				"type": "Microsoft.ServiceBus/namespaces/topics/Subscriptions"
 			},
 			{
-				"name": "queue0001",
+				"name": "example-queue",
 				"type": "Microsoft.ServiceBus/namespaces/queues"
 			},
 			{
-				"name": "rwmyfuncapp0001",
+				"name": "exampletutorialfuncapp1",
 				"type": "Microsoft.Web/sites"
 			},
 			{
-				"name": "rwmyfuncapp0002",
+				"name": "exampletutorialfuncapp2",
 				"type": "Microsoft.Web/sites"
 			}
 		],
 		"edges": [
 			{
-				"node1": "sub0001",
-				"node2": "rwmyfuncapp0001",
-				"type": "read"
-
-			},
-			{
-				"node1": "queue0001",
-				"node2": "rwmyfuncapp0001",
+				"node1": "example-subscription",
+				"node2": "exampletutorialfuncapp1",
 				"type": "read"
 			},
 			{
-				"node1": "rwmyfuncapp0001",
-				"node2": "rwmyfuncapp0002",
+				"node1": "example-queue",
+				"node2": "exampletutorialfuncapp1",
+				"type": "read"
+			},
+			{
+				"node1": "exampletutorialfuncapp1",
+				"node2": "exampletutorialfuncapp2",
 				"type": "http-get"
-			},
-			{
-				"node1": "rwmyfuncapp0001",
-				"node2": "rwmyfuncapp0002",
-				"type": "http-post"
 			}
 		]
 	}

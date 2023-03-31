@@ -1,14 +1,10 @@
 swagger: '2.0'
 info:
   version: 1.0.0
-  title: HTTP API for parsing tachograph file
-  description: HTTP API for parsing tachograph file
   termsOfService: ''
 paths:
   /createAzureResources:
     post:
-      description: parse given tachograph file (mass memory or drivercard file)
-      summary: parse given tachograph file (mass memory or drivercard file)
       consumes:
         - application/json
       parameters:

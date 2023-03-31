@@ -39,8 +39,6 @@ public class UserInputProcessor {
 			userInputValidator.validateUserInput(parseFileRequest);
 
 			ResourceGraph resourceGraph = resourceCreationManager.computeResourceGraph(parseFileRequest);
-
-			// create all non Functionapp related things
 			ResourceCreationPlan resourceCreationPlan = resourceCreationManager.computeResourceCreationPlan(resourceGraph);
 			resourceCreationManager.createAzResources(resourceCreationPlan);
 

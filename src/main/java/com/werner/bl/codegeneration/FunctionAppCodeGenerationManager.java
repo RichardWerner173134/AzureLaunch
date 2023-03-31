@@ -35,7 +35,7 @@ public class FunctionAppCodeGenerationManager {
 
 	private final LocalFunctionExecutor localFunctionExecutor;
 
-	private final TaskLogger LOGGER;
+	private final TaskLogger taskLogger;
 
 	public void generateAndDeployFunctionApps(ResourceGraph resourceGraph, ResourceCreationPlan resourceCreationPlan,
 			AppConfig appConfig) throws IOException, InvalidInputFileContentException, NotImplementedException {
@@ -44,6 +44,7 @@ public class FunctionAppCodeGenerationManager {
 
 		// generate code and projects zipped
 		for (FunctionApp functionApp : functionApps) {
+			taskLogger.beginNewTaskGroup("FunctionApp " + functionApp.getFunctionAppName());
 			Project project = projectGenerator.generateProject(functionApp, resourceGraph.getServicePrincipal(), appConfig);
 
 			if(appConfig.isLocalDeploymentOnly()) {
@@ -54,8 +55,9 @@ public class FunctionAppCodeGenerationManager {
 				String description = "cd " + targetFolderPath + "\nfunc start --port " + localPortNumber;
 				String taskName = "Local FunctionApp Start - " + functionApp.getFunctionAppName();
 				NonPowershellTask nonPowershellTask = new NonPowershellTask(description);
-				LOGGER.addLogItem(nonPowershellTask, taskName);
+				taskLogger.addLogItem(nonPowershellTask, taskName);
 			}
+			taskLogger.endTaskGroup();
 		}
 	}
 

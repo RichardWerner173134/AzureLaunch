@@ -12,6 +12,9 @@ import com.werner.bl.resourcecreation.model.deployment.DeploymentHandler;
 import com.werner.bl.resourcecreation.model.graph.ResourceGraph;
 import com.werner.bl.resourcecreation.model.graph.edge.ResourceEdge;
 import com.werner.bl.resourcecreation.model.graph.node.*;
+import com.werner.log.NonPowershellTask;
+import com.werner.log.TaskGroup;
+import com.werner.log.TaskLogger;
 import com.werner.powershell.ServicePrincipalResolver;
 import generated.internal.v1_0_0.model.AzCodegenRequest;
 import generated.internal.v1_0_0.model.GraphEdges;
@@ -34,6 +37,8 @@ public class ResourceCreationManager {
 	private final ResourceNodeFactory resourceNodeFactory;
 
 	private final DeploymentHandler deploymentHandler;
+
+	private final TaskLogger taskLogger;
 
 	public ResourceGraph computeResourceGraph(AzCodegenRequest request)
 			throws ServicePrincipalException, InvalidInputFileContentException {
@@ -104,9 +109,11 @@ public class ResourceCreationManager {
 
 	public void createAzResources(ResourceCreationPlan resourceCreationPlan)
 			throws AzureResourceCreationFailedException, IOException {
+		taskLogger.beginNewTaskGroup("Using ARM-Templates to create resources");
 		for (Deployment deployment : resourceCreationPlan.getDeployments()) {
 			deploymentHandler.deploy(deployment);
 		}
+		taskLogger.endTaskGroup();
 	}
 
 	private void addParentResources(AbstractResourceNode node, Deployment deployment){
